@@ -5,7 +5,7 @@ Setup everything for REST:
 https://www.jetbrains.com/help/idea/creating-and-running-your-first-restful-web-service.html
 
 If the glassfish server is setup correctly, the service should be available under 
-http://localhost:8080/DistSys_HotelRoomReservation_war_exploded/helloworld
+http://localhost:8080/DistSys_HotelRoomReservation_war_exploded/
 
 ### API Docu:
 
