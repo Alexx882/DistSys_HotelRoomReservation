@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Room Reservation</title>
+
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+	<script src="rest_client.js"></script>
+
+
+</head>
+<body>
+<h1>Room Reservation</h1>
+
+<form action="" method="post">
+	<input type="submit" value="Get Room List" onclick="listRooms()">
+</form>
+<form action="" method="post">
+	<input type="submit" value="Get RoomTypes List" onclick="listRoomTypes()">
+</form>
+<form action="" method="post">
+	<input type="text" id="id"> <input type="submit"
+									   value="Get Room from ID" onclick="getRoom(0)">
+</form>
+<form action="" method="post">
+	<input type="text" id="id2"> <input type="submit"
+										value="Get RoomType by ID" onclick="getRoomType(0)">
+</form>
+
+<form action="" method="post">
+	<input type="submit" value="Set RoomType" onclick="setRoomType()">
+</form>
+<form action="" method="post">
+	<input type="submit" value="Try to Book!" onclick="book()">
+</form>
+
+<div class="leftArea">
+	<ul id="result"></ul>
+</div>
+
+
+</body>
+</html>
