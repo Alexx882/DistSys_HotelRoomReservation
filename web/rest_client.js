@@ -24,13 +24,14 @@ function listRooms() {
         url: rootURL + 'hotelrooms',
         dataType: "json", // data type of response
         success: function(result){
-            alert('Success: ' + renderList);
+            alert('Success: ' + JSON.stringify(result));
+			renderList(result);
         },
         error: function(result){
             alert('Error: ' + result);
         }
     });
-    alert(" Result: "+result);
+   
 }
 
 function getRoom(id) {
@@ -39,9 +40,12 @@ function getRoom(id) {
 
     $.ajax({
         type: 'GET',
-        url: rootURL + '/hotelrooms/'+id,
+        url: rootURL + 'hotelrooms/'+id,
         dataType: "json",
-        success: renderList
+         success: function(result){
+			  alert('Success: ' + JSON.stringify(result));
+			renderList(result);
+        }
     });
 }
 
@@ -50,7 +54,9 @@ function listRoomTypes() {
         type: 'GET',
         url: rootURL + 'roomtypes',
         dataType: "json",
-        success: renderList
+        success: function(result){
+			renderList(result);
+        }
     });
 }
 
@@ -58,9 +64,12 @@ function getRoomType(id) {
     id = document.getElementById('id2').value;
     $.ajax({
         type: 'GET',
-        url: rootURL+ '/roomtypes'+ id,
+        url: rootURL+ 'roomtypes/'+ id,
         dataType: "json",
-        success: renderList
+         success: function(result){
+			  alert('Success: ' + JSON.stringify(result));
+			renderList(result);
+        }
     });
 }
 
@@ -69,7 +78,7 @@ function setRoomType() {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
-        url: rootURL+ '/roomtypes',
+        url: rootURL+ 'roomtypes',
         dataType: "json",
         data: getRoomTypeData(),
         success: function(result){
@@ -85,7 +94,7 @@ function book() {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
-        url: rootURL+ '/roomtypes/booking',
+        url: rootURL+ 'roomtypes/booking',
         dataType: "json",
         data: getBookData(),
         success: function(result){
@@ -142,12 +151,20 @@ function getBookData() {
 
 
 
-function renderList(data) {
-    // JAX-RS serializes an empty list as null, and a 'collection of one' as an object (not an 'array of one')
-    var list = data == null ? [] : (data instanceof Array ? data : [data]);
-
-
-    $.each(list, function(index, id) {
-        $('#result').append('<li><p>'+id.value+'</p></li>');
-    });
+function renderList(json) {
+   
+    
+	var html = '<ul>';
+    for (var n in json) { // Each top-level entry
+        html += '<li>' + JSON.stringify(json[n]) + '<ul>';
+       
+        html += '</ul></li>';
+    }
+    html += '</ul>';
+    $('body').append(html);
+	
+	
+	
+	
+	
 }
