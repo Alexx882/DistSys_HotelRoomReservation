@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="org.glassfish.jersey.media:html-json:2.4" type="repository">
+    <properties maven-id="org.glassfish.jersey.media:html-json:2.4" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/html-json-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.ws.rs-api-2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/net.java.html.json-0.3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/org-openide-util-lookup-RELEASE73.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jersey-client-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jersey-common-2.4.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.annotation-api-1.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/osgi-resource-locator-1.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/guava-14.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hk2-api-2.2.0-b21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hk2-utils-2.2.0-b21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/javax.inject-2.2.0-b21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/hk2-locator-2.2.0-b21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/asm-all-repackaged-2.2.0-b21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/cglib-2.2.0-b21.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/json-20090211.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
