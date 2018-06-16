@@ -1,6 +1,8 @@
 package rest;
 
 import communication.AdminRequest;
+import communication.AvailabilityRequest;
+import communication.AvailabilityResponse;
 import communication.BookingRequest;
 import controllers.HotelRoomManager;
 import controllers.HotelSecurityManager;
@@ -53,13 +55,24 @@ public class RoomTypeService {
     }
 
     @POST
+    @Path("/checkavailability")
+    public Response checkAvailability(AvailabilityRequest request) {
+        if (request == null)
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        AvailabilityResponse response = roomManager.checkRoomAvailability(request);
+
+        return Response.ok(response).build();
+    }
+
+    @POST
     @Path("/booking")
     public Response bookRoom(BookingRequest request) {
         if (request == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
 
-        roomManager.bookRoom(request);
+        boolean success = roomManager.bookRoom(request);
 
-        return Response.noContent().build();
+        return Response.ok(success).build();
     }
 }

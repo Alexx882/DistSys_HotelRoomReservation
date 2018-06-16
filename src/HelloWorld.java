@@ -19,11 +19,11 @@ public class HelloWorld {
     // The Java method will process HTTP GET requests
     @GET
     @Produces({MediaType.TEXT_HTML})
-    public InputStream viewHome()throws FileNotFoundException
+    public String viewHome()throws FileNotFoundException
     {
-        File f = new File("test.html");
-        return new FileInputStream(f);
-
+        return "HotelRoomManager startpage."
+                + "<br />"
+                + "<a href=http://localhost:8080/test.html>startpage from moedi</a>";
     }
 
     @GET

@@ -29,6 +29,7 @@ $( document ).ready(function() {
     listRoomTypes();
 });
 
+// todo use checkAvailability(request, callback)
 function checkAvailability() {
     arrivalDate = document.getElementById('arrivalDate').value;
     departureDate = document.getElementById('departureDate').value;
@@ -71,6 +72,7 @@ function goBackToForm() {
     $('#reservation-form').addClass('visible');
 }
 
+// todo use bookRoom(request, callback)
 function bookRoom() {
     givenname = document.getElementById('givenname').value;
     surname = document.getElementById('surname').value;
@@ -107,7 +109,7 @@ function bookRoom() {
 }
 
 
-//mödi stuff; some things still useful, some not :D
+// todo remove: mödi stuff; some things still useful, some not :D
 
 function listRooms() {
     $.ajax({
@@ -117,23 +119,19 @@ function listRooms() {
         dataType: "json", // data type of response
         success: function(result){
             console.log(result + " " + rootURL);
-           // alert('Success: ' + renderList);
         },
         error: function(result){
             console.log(result + " " + rootURL);
-           // alert('Error: ' + result);
         }
     });
-   // alert(" Result: "+result);
 }
 
 function getRoom(id) {
     id = document.getElementById('id').value;
 
-
     $.ajax({
         type: 'GET',
-        url: rootURL + '/hotelrooms/'+id,
+        url: rootURL + 'hotelrooms/' + id,
         dataType: "json",
         success: renderList
     });
@@ -152,98 +150,95 @@ function getRoomType(id) {
     id = document.getElementById('id2').value;
     $.ajax({
         type: 'GET',
-        url: rootURL+ '/roomtypes'+ id,
+        url: rootURL + 'roomtypes/' + id,
         dataType: "json",
         success: renderList
     });
 }
 
-
-function setRoomType() {
+function updateRoomInfos(roomInfoRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
-        url: rootURL+ '/roomtypes',
+        url: rootURL + 'roomtypes',
         dataType: "json",
-        data: getRoomTypeData(),
-        success: function(result){
+        data: roomInfoRequest,
+        success: function (result) {
             console.log(result);
-           // alert('Success: ' + result);
+            callback(result);
         },
-        error: function(result){
+        error: function (result) {
             console.log(result);
-         //   alert('An Error occured: ' + result);
         }
     });
 }
 
-function book() {
+function bookRoom(bookingRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
-        url: rootURL+ '/roomtypes/booking',
+        url: rootURL + 'roomtypes/booking',
         dataType: "json",
-        data: getBookData(),
-        success: function(result){
+        data: bookingRequest,
+        success: function (result) {
             console.log(result);
-           // alert('Success: ' + result);
+            callback(result);
         },
-        error: function(result){
+        error: function (result) {
             console.log(result);
-           // alert('An Error occured: ' + result);
+        }
+    });
+}
+
+function checkAvailability(availabilityRequest, callback) {
+    $.ajax({
+        type: 'POST',
+        contentType: 'application/json',
+        url: rootURL + 'roomtypes/checkavailability',
+        dataType: "json",
+        data: availabilityRequest,
+        success: function (result) {
+            console.log(result);
+            callback(result);
+        },
+        error: function (result) {
+            console.log(result);
         }
     });
 }
 
 
-// Helper function to serialize all the form fields into a JSON string
-function getRoomTypeData() {
-    /*
-    {
-        "password": "admin",
-        "typeId": 2,
-        "numberOfRooms": 2,
-        "prize": 5.7
-    }*/
-
+function buildRoomUpdateRequest(roomtypeid, numberOfRooms, prize) {
     return JSON.stringify({
         "password": "admin",
-        "typeId": 2,
-        "numberOfRooms": 2,
-        "prize": 5.7
-    });
-
-
-    /*return JSON.stringify({
-        "id": $('#id').val(),
-        "name": $('#name').val(),
-        "grapes": $('#grapes').val(),
-        "country": $('#country').val(),
-        "region": $('#region').val(),
-        "year": $('#year').val(),
-        "description": $('#description').val()
-        }); */
-}
-
-function getBookData() {
-
-
-    return JSON.stringify({
-        "typeId": 2,
-        "startDate": "2018-06-05T13:27",
-        "endDate": "2018-06-05T13:27",
-        "firstName": "Peter",
-        "lastName": "Bauer"
+        "typeId": roomtypeid,
+        "numberOfRooms": numberOfRooms,
+        "prize": prize
     });
 }
 
+function buildBookingRequest(roomtypeid, startdate, enddate, firstname, lastname) {
+    return JSON.stringify({
+        "typeId": roomtypeid,
+        "startDate": startdate,
+        "endDate": enddate,
+        "firstName": firstname,
+        "lastName": lastname
+    });
+}
 
+function buildAvailabilityRequest(typeid, startdate, enddate) {
+    return JSON.stringify({
+        "typeId": typeid,
+        "startDate": startdate,
+        "endDate": enddate
+    });
+}
 
 
 function renderList(json) {
+    var html = '<ul>';
 
-
-	var html = '<ul>';
     for (var n in json) { // Each top-level entry
         html += '<li>' + JSON.stringify(json[n]) + '<ul>';
 
@@ -251,9 +246,4 @@ function renderList(json) {
     }
     html += '</ul>';
     $('body').append(html);
-
-
-
-
-
 }
