@@ -1,5 +1,6 @@
 package rest;
 
+import com.sun.management.VMOption;
 import communication.AdminRequest;
 import communication.BookingRequest;
 import controllers.HotelRoomManager;
@@ -9,6 +10,7 @@ import database.DummyRepos;
 import models.RoomType;
 
 import javax.annotation.PostConstruct;
+import javax.naming.ldap.Control;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

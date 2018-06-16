@@ -3,7 +3,12 @@
  */
 
 // The root URL for the RESTful services
-var rootURL = "http://localhost:8080/DistSys_HotelRoomReservation_war_exploded/";
+var rootURL = "http://localhost:8080/DistSys_HotelRoom_war_exploded/";
+var arrivalDate;
+var departureDate;
+var roomType;
+var givenname;
+var surname;
 
 //listRooms() ++++++  GET /hotelrooms - list of all hotelrooms 
 
@@ -16,22 +21,109 @@ var rootURL = "http://localhost:8080/DistSys_HotelRoomReservation_war_exploded/"
 //setRoomType()   ++  POST /roomtypes - create/update a roomtype uses communication.AdminRequest (password is currently "admin"), eg:
 //book() 	  ++++++  POST /roomtypes/booking
 
-//TODO: success ?
+$( document ).ready(function() {
+    document.getElementById("arrivalDate").valueAsDate = new Date();
+    document.getElementById("departureDate").valueAsDate = new Date();
+
+   //if i knew how the output looks like I'd like to use it as options in the #roomtype input
+    listRoomTypes();
+});
+
+// todo use checkAvailability(request, callback)
+function checkAvailability() {
+    arrivalDate = document.getElementById('arrivalDate').value;
+    departureDate = document.getElementById('departureDate').value;
+    roomType = document.getElementById('roomType').value;
+
+    console.log(window.location.pathname);
+
+    if(departureDate < arrivalDate) {
+        //invalid
+    } else {
+        $("#reservation-form").addClass('invisible');
+        $("#book-form").removeClass('invisible');
+        $('#book-form').addClass('visible');
+
+        $('#availableText').html('The room of type ' + roomType + " is from " + arrivalDate + " to " + departureDate + " still available!");
+
+
+        //try to post this info on server
+        $.ajax({
+            type: 'GET',
+            url: rootURL + 'check?arrivalDate='+arrivalDate+'&departureDate='+departureDate+'&roomType='+roomType,
+            crossDomain:    true,
+            dataType: "json",
+            success: function(result){
+                console.log(result);
+                //if result 204, show #book-form
+                //else result 200 and json with alternatives
+
+            },
+            error: function(result){
+                console.log(result);
+            }
+        });
+    }
+}
+
+function goBackToForm() {
+    $("#book-form").addClass('invisible');
+    $("#reservation-form").removeClass('invisible');
+    $('#reservation-form').addClass('visible');
+}
+
+// todo use bookRoom(request, callback)
+function bookRoom() {
+    givenname = document.getElementById('givenname').value;
+    surname = document.getElementById('surname').value;
+    console.log(givenname + " ");
+
+    if(givenname != "" && surname != "") {
+
+        //data as json - although typeId still int
+        var data = JSON.stringify({
+            "typeId": 1,
+            "startDate": arrivalDate,
+            "endDate": departureDate,
+            "firstName":givenname,
+            "lastName": surname
+        });
+
+        //post that shit
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json',
+            url: rootURL + '/roomtypes/booking',
+            dataType: "json",
+            data: data,
+            success: function (result) {
+                console.log(result);
+            },
+            error: function (result) {
+                console.log(result);
+            }
+        });
+    } else {
+        //not valid
+    }
+}
+
+
+// todo remove: mödi stuff; some things still useful, some not :D
 
 function listRooms() {
     $.ajax({
         type: 'GET',
         url: rootURL + 'hotelrooms',
+        crossDomain:    true,
         dataType: "json", // data type of response
-        success: function (result) {
-            // alert('Success: ' + JSON.stringify(result));
-            renderList(result);
+        success: function(result){
+            console.log(result + " " + rootURL);
         },
-        error: function (result) {
-            alert('Error: ' + JSON.stringify(result));
+        error: function(result){
+            console.log(result + " " + rootURL);
         }
     });
-
 }
 
 function getRoom(id) {
@@ -41,10 +133,7 @@ function getRoom(id) {
         type: 'GET',
         url: rootURL + 'hotelrooms/' + id,
         dataType: "json",
-        success: function (result) {
-            // alert('Success: ' + JSON.stringify(result));
-            renderList(result);
-        }
+        success: renderList
     });
 }
 
@@ -53,9 +142,7 @@ function listRoomTypes() {
         type: 'GET',
         url: rootURL + 'roomtypes',
         dataType: "json",
-        success: function (result) {
-            renderList(result);
-        }
+        success: renderList
     });
 }
 
@@ -65,10 +152,7 @@ function getRoomType(id) {
         type: 'GET',
         url: rootURL + 'roomtypes/' + id,
         dataType: "json",
-        success: function (result) {
-            // alert('Success: ' + JSON.stringify(result));
-            renderList(result);
-        }
+        success: renderList
     });
 }
 
@@ -80,10 +164,11 @@ function updateRoomInfos(roomInfoRequest, callback) {
         dataType: "json",
         data: roomInfoRequest,
         success: function (result) {
+            console.log(result);
             callback(result);
         },
         error: function (result) {
-            alert('An Error occured: ' + result);
+            console.log(result);
         }
     });
 }
@@ -96,10 +181,11 @@ function bookRoom(bookingRequest, callback) {
         dataType: "json",
         data: bookingRequest,
         success: function (result) {
+            console.log(result);
             callback(result);
         },
         error: function (result) {
-            alert('An Error occured: ' + result);
+            console.log(result);
         }
     });
 }
@@ -112,10 +198,11 @@ function checkAvailability(availabilityRequest, callback) {
         dataType: "json",
         data: availabilityRequest,
         success: function (result) {
+            console.log(result);
             callback(result);
         },
         error: function (result) {
-            alert('An Error occured: ' + result);
+            console.log(result);
         }
     });
 }
@@ -150,9 +237,8 @@ function buildAvailabilityRequest(typeid, startdate, enddate) {
 
 
 function renderList(json) {
-
-
     var html = '<ul>';
+
     for (var n in json) { // Each top-level entry
         html += '<li>' + JSON.stringify(json[n]) + '<ul>';
 
@@ -160,6 +246,4 @@ function renderList(json) {
     }
     html += '</ul>';
     $('body').append(html);
-
-
 }
