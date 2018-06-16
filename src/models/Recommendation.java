@@ -28,4 +28,7 @@ public class Recommendation {
         return endDate;
     }
 
+    public String toString(){
+        return "Room Type: "+roomType+" from "+startDate.toString()+" to "+endDate.toString();
+    }
 }
