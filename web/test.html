@@ -1,12 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Room Reservation</title>
+    <meta charset="ISO-8859-1">
+    <title>Room Reservation</title>
 
-	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 
-	<script src="rest_client.js"></script>
+    <script src="rest_client.js"></script>
+
+    <script>
+        function checkAvail() {
+            var avRequest =
+                buildAvailabilityRequest(2, "2018-06-05T13:27", "2018-06-05T13:27");
+            checkAvailability(avRequest, function (response) {
+                alert('Success: ' + JSON.stringify(response));
+            });
+        }
+
+        function book() {
+            var boRequest =
+                buildBookingRequest(2, "2018-06-05T13:27",
+                    "2018-06-05T13:27", "peter", "Bauer");
+            bookRoom(boRequest, function (response) {
+                alert('Success: ' + JSON.stringify(response));
+            });
+        }
+
+        function updateRooms() {
+            var adRequest =
+                buildRoomUpdateRequest(2, 10, 5.7);
+            updateRoomInfos(adRequest, function (response) {
+                alert('Success: ' + JSON.stringify(response));
+            });
+        }
+    </script>
 
 
 </head>
@@ -14,26 +41,26 @@
 <h1>Room Reservation</h1>
 
 
-	<input type="submit" value="Get Room List" onclick="listRooms()">
-	<br>
-	<input type="submit" value="Get RoomTypes List" onclick="listRoomTypes()">
-	<br>
-	<input type="text" id="id"> <input type="submit"
-									   value="Get Room from ID" onclick="getRoom(0)">
-									   <br>
-	<input type="text" id="id2"> <input type="submit"
-										value="Get RoomType by ID" onclick="getRoomType(0)">
-										<br>
+<input type="submit" value="Get Room List" onclick="listRooms()">
+<br>
+<input type="submit" value="Get RoomTypes List" onclick="listRoomTypes()">
+<br>
+<input type="text" id="id"> <input type="submit"
+                                   value="Get Room from ID" onclick="getRoom(0)">
+<br>
+<input type="text" id="id2"> <input type="submit"
+                                    value="Get RoomType by ID" onclick="getRoomType(0)">
+<br>
 
-	<input type="submit" value="Set RoomType" onclick="setRoomType()">
-	<br>
-	<input type="submit" value="Try to Book!" onclick="book()">
-	<br>
+<input type="submit" value="Set RoomType" onclick="updateRooms()">
+<br/>
+<input type="submit" value="check if booking is available!" onclick="checkAvail()">
+<br>
+<input type="submit" value="Try to Book!" onclick="book()">
+<br>
 
 
-
-	<div id="result"></div>
-
+<div id="result"></div>
 
 
 </body>

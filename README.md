@@ -41,3 +41,6 @@ POST /roomtypes/booking - (try to) book a roomtype
     "lastName": "Bauer"
 }
 ```
+
+POST /roomtypes/checkavailability - checks if a room of the given type is available
+                                    uses communication.AvailabilityRequest and communication.AvailabilityResponse
