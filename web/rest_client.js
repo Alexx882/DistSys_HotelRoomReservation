@@ -78,6 +78,7 @@ function bookRoomCommand() {
 }
 
 
+// todo remove: mödi stuff; some things still useful, some not :D
 
 function listRooms() {
     $.ajax({
@@ -126,10 +127,7 @@ function getRoomType(id) {
         type: 'GET',
         url: rootURL + 'roomtypes/' + id,
         dataType: "json",
-        success: function (result) {
-            // alert('Success: ' + JSON.stringify(result));
-            console.log(renderList(result));
-        }
+        success: renderList
     });
 }
 
@@ -141,10 +139,11 @@ function updateRoomInfos(roomInfoRequest, callback) {
         dataType: "json",
         data: roomInfoRequest,
         success: function (result) {
+            console.log(result);
             callback(result);
         },
         error: function (result) {
-            alert('An Error occured: ' + result);
+            console.log(result);
         }
     });
 }
@@ -173,10 +172,11 @@ function checkAvailability(availabilityRequest, callback) {
         dataType: "json",
         data: availabilityRequest,
         success: function (result) {
-           // callback(result);
+            console.log(result);
+            callback(result);
         },
         error: function (result) {
-         console.log(result);
+            console.log(result);
         }
     });
 }
@@ -221,7 +221,9 @@ function jsonToList(json) {
 }
 
 function renderList(json) {
+
     var html = '<ul>';
+
     for (var n in json) { // Each top-level entry
         html += '<li>' + JSON.stringify(json[n]) + '<ul>';
 
@@ -230,5 +232,3 @@ function renderList(json) {
     html += '</ul>';
     $('body').append(html);
 }
-
-
