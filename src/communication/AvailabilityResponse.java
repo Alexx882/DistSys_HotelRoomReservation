@@ -14,6 +14,10 @@ public class AvailabilityResponse extends AvailabilityRequest {
         this.endDate = request.endDate;
     }
 
+    public AvailabilityResponse() {
+
+    }
+
     // either available and some num.
     // or not available and some alts.
 

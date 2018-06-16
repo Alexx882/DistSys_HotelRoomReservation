@@ -55,6 +55,7 @@ public class RoomTypeService {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/checkavailability")
     public Response checkAvailability(AvailabilityRequest request) {
         if (request == null)
@@ -66,6 +67,7 @@ public class RoomTypeService {
     }
 
     @POST
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/booking")
     public Response bookRoom(BookingRequest request) {
         if (request == null)
