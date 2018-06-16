@@ -27,16 +27,16 @@ $( document ).ready(function() {
     document.getElementById("arrivalDate").valueAsDate = new Date();
     document.getElementById("departureDate").valueAsDate = new Date();
 
-   //if i knew how the output looks like I'd like to use it as options in the #roomtype input
-    listRoomTypes();
+    listRoomTypes(); //I'm not sure why he does it twice...
 });
 
-function checkAvailability() {
-    arrivalDate = document.getElementById('arrivalDate').value;
-    departureDate = document.getElementById('departureDate').value;
+function checkAvailabilityCommand() {
+    arrivalDate = new Date(document.getElementById('arrivalDate').value);
+    departureDate = new Date(document.getElementById('departureDate').value);
     roomType = document.getElementById('roomType').value;
 
-    console.log(window.location.pathname);
+
+    console.log(departureDate);
 
     if(departureDate < arrivalDate) {
         //invalid
@@ -45,25 +45,13 @@ function checkAvailability() {
         $("#book-form").removeClass('invisible');
         $('#book-form').addClass('visible');
 
-        $('#availableText').html('The room of type ' + roomType + " is from " + arrivalDate + " to " + departureDate + " still available!");
+        $('#availableText').html('The room of type ' + $('#roomType option:selected').text() + " is from " + arrivalDate.getDate() + "." +
+            arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to " + departureDate.getDate() + "." +
+            departureDate.getMonth() + "." + departureDate.getFullYear() + " still available!");
 
+        data = buildAvailabilityRequest("1", arrivalDate.toJSON(), departureDate.toJSON());
+        checkAvailability(data);
 
-        //try to post this info on server
-        $.ajax({
-            type: 'GET',
-            url: rootURL + 'check?arrivalDate='+arrivalDate+'&departureDate='+departureDate+'&roomType='+roomType,
-            crossDomain:    true,
-            dataType: "json",
-            success: function(result){
-                console.log(result);
-                //if result 204, show #book-form
-                //else result 200 and json with alternatives
-
-            },
-            error: function(result){
-                console.log(result);
-            }
-        });
     }
 }
 
@@ -73,60 +61,38 @@ function goBackToForm() {
     $('#reservation-form').addClass('visible');
 }
 
-function bookRoom() {
+function bookRoomCommand() {
     givenname = document.getElementById('givenname').value;
     surname = document.getElementById('surname').value;
     console.log(givenname + " ");
 
     if(givenname != "" && surname != "") {
 
-        //data as json - although typeId still int
-        var data = JSON.stringify({
-            "typeId": 1,
-            "startDate": arrivalDate,
-            "endDate": departureDate,
-            "firstName":givenname,
-            "lastName": surname
-        });
+        var data = buildBookingRequest(roomType, arrivalDate, departureDate, givenname, surname);
+        bookRoom(data);
 
-        //post that shit
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json',
-            url: rootURL + '/roomtypes/booking',
-            dataType: "json",
-            data: data,
-            success: function (result) {
-                console.log(result);
-            },
-            error: function (result) {
-                console.log(result);
-            }
-        });
+
     } else {
         //not valid
     }
 }
 
 
-//mödi stuff; some things still useful, some not :D
 
 function listRooms() {
     $.ajax({
         type: 'GET',
         url: rootURL + 'hotelrooms',
         crossDomain:    true,
-        dataType: "json", // data type of response
+        dataType: "json",
         success: function(result){
-            console.log(result + " " + rootURL);
-           // alert('Success: ' + renderList);
+            console.log(result);
         },
         error: function(result){
-            console.log(result + " " + rootURL);
-           // alert('Error: ' + result);
+            console.log("errror.")
+            console.log(result);
         }
     });
-   // alert(" Result: "+result);
 }
 
 function getRoom(id) {
@@ -137,7 +103,6 @@ function getRoom(id) {
         url: rootURL + 'hotelrooms/' + id,
         dataType: "json",
         success: function (result) {
-            // alert('Success: ' + JSON.stringify(result));
             renderList(result);
         }
     });
@@ -149,7 +114,8 @@ function listRoomTypes() {
         url: rootURL + 'roomtypes',
         dataType: "json",
         success: function (result) {
-            renderList(result);
+            //renderList(result);
+            var rooms = jsonToList(result);
         }
     });
 }
@@ -162,7 +128,7 @@ function getRoomType(id) {
         dataType: "json",
         success: function (result) {
             // alert('Success: ' + JSON.stringify(result));
-            renderList(result);
+            console.log(renderList(result));
         }
     });
 }
@@ -194,7 +160,7 @@ function bookRoom(bookingRequest, callback) {
             callback(result);
         },
         error: function (result) {
-            alert('An Error occured: ' + result);
+            console.log(result);
         }
     });
 }
@@ -207,10 +173,10 @@ function checkAvailability(availabilityRequest, callback) {
         dataType: "json",
         data: availabilityRequest,
         success: function (result) {
-            callback(result);
+           // callback(result);
         },
         error: function (result) {
-            alert('An Error occured: ' + result);
+         console.log(result);
         }
     });
 }
@@ -243,6 +209,16 @@ function buildAvailabilityRequest(typeid, startdate, enddate) {
     });
 }
 
+function jsonToList(json) {
+   var list = [];
+
+    for(var n in json) {
+        list.push(json[n].id) //later i'd rather have the name of the roomtype;
+        document.getElementById('roomType').options.add(new Option(json[n].id, json[n].id));
+    }
+
+    return list;
+}
 
 function renderList(json) {
     var html = '<ul>';
