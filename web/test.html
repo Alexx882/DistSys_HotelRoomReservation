@@ -12,7 +12,7 @@
         function checkAvail() {
             var avRequest =
                 buildAvailabilityRequest(2, "2018-06-05T13:27", "2018-06-05T13:27");
-            checkAvailability(avRequest, function (response) {
+            checkAvailabilityServer(avRequest, function (response) {
                 alert('Success: ' + JSON.stringify(response));
             });
         }
@@ -21,7 +21,7 @@
             var boRequest =
                 buildBookingRequest(2, "2018-06-05T13:27",
                     "2018-06-05T13:27", "peter", "Bauer");
-            bookRoom(boRequest, function (response) {
+            bookRoomServer(boRequest, function (response) {
                 alert('Success: ' + JSON.stringify(response));
             });
         }
@@ -29,7 +29,7 @@
         function updateRooms() {
             var adRequest =
                 buildRoomUpdateRequest(2, 10, 5.7);
-            updateRoomInfos(adRequest, function (response) {
+            updateRoomInfosServer(adRequest, function (response) {
                 alert('Success: ' + JSON.stringify(response));
             });
         }
@@ -116,7 +116,7 @@
 <br/>
 
 
-<!-- mÃ¶dis original forms
+<!-- mödis original forms
 
 <form action="" method="post">
     <input type="submit" value="Get Room List" onclick="listRooms()">

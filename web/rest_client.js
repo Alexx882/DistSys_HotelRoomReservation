@@ -3,33 +3,21 @@
  */
 
 // The root URL for the RESTful services
-var rootURL = "http://localhost:8080/DistSys_HotelRoom_war_exploded/";
+var rootURL = "http://localhost:8080/DistSys_HotelRoomReservation_war_exploded/";
 var arrivalDate;
 var departureDate;
 var roomType;
 var givenname;
 var surname;
 
-//listRooms() ++++++  GET /hotelrooms - list of all hotelrooms 
-
-//getRoom(id) ++++++  GET /hotelrooms/{id} - hotelroom with ID
-
-//listRoomTypes() ++  GET /roomtypes - list of all roomtypes
-
-//getRoomType(id) ++  GET /roomtypes/{id} - roomtype with ID
-
-//setRoomType()   ++  POST /roomtypes - create/update a roomtype uses communication.AdminRequest (password is currently "admin"), eg:
-//book() 	  ++++++  POST /roomtypes/booking
-
-$( document ).ready(function() {
+$(document).ready(function () {
     document.getElementById("arrivalDate").valueAsDate = new Date();
     document.getElementById("departureDate").valueAsDate = new Date();
 
-   //if i knew how the output looks like I'd like to use it as options in the #roomtype input
+    //if i knew how the output looks like I'd like to use it as options in the #roomtype input
     listRoomTypes();
 });
 
-// todo use checkAvailability(request, callback)
 function checkAvailability() {
     arrivalDate = document.getElementById('arrivalDate').value;
     departureDate = document.getElementById('departureDate').value;
@@ -37,7 +25,7 @@ function checkAvailability() {
 
     console.log(window.location.pathname);
 
-    if(departureDate < arrivalDate) {
+    if (departureDate < arrivalDate) {
         //invalid
     } else {
         $("#reservation-form").addClass('invisible');
@@ -46,21 +34,19 @@ function checkAvailability() {
 
         $('#availableText').html('The room of type ' + roomType + " is from " + arrivalDate + " to " + departureDate + " still available!");
 
-
         //try to post this info on server
-        $.ajax({
-            type: 'GET',
-            url: rootURL + 'check?arrivalDate='+arrivalDate+'&departureDate='+departureDate+'&roomType='+roomType,
-            crossDomain:    true,
-            dataType: "json",
-            success: function(result){
-                console.log(result);
-                //if result 204, show #book-form
-                //else result 200 and json with alternatives
+        // todo load id from room type, correct date types
+        var request = buildAvailabilityRequest(2, new Date, new Date);
 
-            },
-            error: function(result){
-                console.log(result);
+        checkAvailabilityServer(request, function (result) {
+            if (result.isRoomAvailable) {
+                var availableRooms = result.numAvailableRooms;
+                console.log("available: ", availableRooms);
+                // todo show #book-form
+            } else {
+                console.log("not available.");
+                var alternatives = result.alternativeRooms;
+                // todo show alternatives
             }
         });
     }
@@ -72,20 +58,21 @@ function goBackToForm() {
     $('#reservation-form').addClass('visible');
 }
 
-// todo use bookRoom(request, callback)
+// todo use bookRoomServer(request, callback)
+// todo see checkavail for details.
 function bookRoom() {
     givenname = document.getElementById('givenname').value;
     surname = document.getElementById('surname').value;
     console.log(givenname + " ");
 
-    if(givenname != "" && surname != "") {
+    if (givenname != "" && surname != "") {
 
         //data as json - although typeId still int
         var data = JSON.stringify({
             "typeId": 1,
             "startDate": arrivalDate,
             "endDate": departureDate,
-            "firstName":givenname,
+            "firstName": givenname,
             "lastName": surname
         });
 
@@ -109,18 +96,16 @@ function bookRoom() {
 }
 
 
-// todo remove: mödi stuff; some things still useful, some not :D
-
 function listRooms() {
     $.ajax({
         type: 'GET',
         url: rootURL + 'hotelrooms',
-        crossDomain:    true,
+        crossDomain: true,
         dataType: "json", // data type of response
-        success: function(result){
+        success: function (result) {
             console.log(result + " " + rootURL);
         },
-        error: function(result){
+        error: function (result) {
             console.log(result + " " + rootURL);
         }
     });
@@ -156,11 +141,13 @@ function getRoomType(id) {
     });
 }
 
-function updateRoomInfos(roomInfoRequest, callback) {
+
+function updateRoomInfosServer(roomInfoRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
         url: rootURL + 'roomtypes',
+        crossDomain: true,
         dataType: "json",
         data: roomInfoRequest,
         success: function (result) {
@@ -173,11 +160,12 @@ function updateRoomInfos(roomInfoRequest, callback) {
     });
 }
 
-function bookRoom(bookingRequest, callback) {
+function bookRoomServer(bookingRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
         url: rootURL + 'roomtypes/booking',
+        crossDomain: true,
         dataType: "json",
         data: bookingRequest,
         success: function (result) {
@@ -190,11 +178,12 @@ function bookRoom(bookingRequest, callback) {
     });
 }
 
-function checkAvailability(availabilityRequest, callback) {
+function checkAvailabilityServer(availabilityRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
         url: rootURL + 'roomtypes/checkavailability',
+        crossDomain: true,
         dataType: "json",
         data: availabilityRequest,
         success: function (result) {
