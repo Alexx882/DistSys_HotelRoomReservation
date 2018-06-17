@@ -16,14 +16,13 @@ $(document).ready(function () {
     document.getElementById("arrivalDate").valueAsDate = new Date();
     document.getElementById("departureDate").valueAsDate = new Date();
 
-    listRoomTypes(); //I'm not sure why he does it twice...
+    listRoomTypes();
 });
 
 function checkAvailabilityCommand() {
     arrivalDate = new Date(document.getElementById('arrivalDate').value);
     departureDate = new Date(document.getElementById('departureDate').value);
     roomType = document.getElementById('roomType').value;
-
 
     console.log(departureDate);
 
@@ -38,12 +37,9 @@ function checkAvailabilityCommand() {
             arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to " + departureDate.getDate() + "." +
             departureDate.getMonth() + "." + departureDate.getFullYear() + " still available!");
 
-        data = buildAvailabilityRequest("1", arrivalDate.toJSON(), departureDate.toJSON());
-        checkAvailability(data);
-
-        //try to post this info on server
-        // todo load id from room type, correct date types
-        var request = buildAvailabilityRequest(2, new Date, new Date);
+        // try to post this info on server
+        // todo load id from room type
+        var request = buildAvailabilityRequest("1", arrivalDate.toJSON(), departureDate.toJSON());
 
         checkAvailabilityServer(request, function (result) {
             if (result.isRoomAvailable) {
@@ -73,7 +69,7 @@ function bookRoomCommand() {
     if (givenname != "" && surname != "") {
 
         var data = buildBookingRequest(roomType, arrivalDate, departureDate, givenname, surname);
-        bookRoom(data);
+        bookRoomServer(data, function(result){});
 
 
     } else {
@@ -133,7 +129,8 @@ function getRoomType(id) {
     });
 }
 
-function updateRoomInfos(roomInfoRequest, callback) {
+
+function updateRoomInfosServer(roomInfoRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
@@ -160,6 +157,7 @@ function bookRoomServer(bookingRequest, callback) {
         dataType: "json",
         data: bookingRequest,
         success: function (result) {
+            console.log(result);
             callback(result);
         },
         error: function (result) {
