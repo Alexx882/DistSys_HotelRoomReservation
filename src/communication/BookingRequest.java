@@ -20,4 +20,22 @@ public class BookingRequest {
 
     @XmlElement
     public String lastName;
+
+
+    public boolean isEmpty() {
+        return typeId < 0 &&
+                startDate.equals(null) &&
+                endDate.equals(null) &&
+                firstName.equals(null) &&
+                lastName.equals(null);
+    }
+
+    public boolean isInvalid() {
+
+        return typeId < 0 ||
+                startDate.equals(null) ||
+                endDate.equals(null) ||
+                firstName.equals(null) ||
+                lastName.equals(null);
+    }
 }
