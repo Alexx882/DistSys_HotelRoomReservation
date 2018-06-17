@@ -122,8 +122,6 @@ public class HotelRoomManager {
         return availableRooms;
     }
 
-
-
     public AvailabilityResponse checkRoomAvailability(AvailabilityRequest request) {
 
         AvailabilityResponse response = new AvailabilityResponse(request);
