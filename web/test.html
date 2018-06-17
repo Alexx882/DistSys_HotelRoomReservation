@@ -66,29 +66,39 @@
 
 
 <div id="result"></div> -->
+<div class="header">
+    <div class="row">
+        <div class="left col-md-6">
+            <button class="logo-button" onClick="goBackToForm()">Hotel Book Website</button>
+        </div>
+        <div class="right col-md-6">
+            <button class="manage-rooms-button" onClick="showAdminLogin()">Manage rooms</button>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="row justify-content-md-center">
-        <div class="card text-white form-card-1 col-md-6" id="reservation-form">
+        <div class="card text-white form-card invisible col-md-6" id="reservation-form">
             <div class="card-header">Room Reservation</div>
             <div class="card-body">
 
                 <div class="row">
                     <div class="form-group col-md-6 col-sm-6">
                         <label for="arrivalDate">Arrival Date</label>
-                        <input type="date" class="form-control" id="arrivalDate"/>
+                        <input type="date" class="form-control" id="arrivalDate" required/>
                     </div>
 
                     <div class="from-group col-md-6 col-sm-6">
                         <label for="departureDate">Departure Date</label>
-                        <input type="date" class="form-control" id="departureDate"/>
+                        <input type="date" class="form-control" id="departureDate" required/>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group col-md-6 col-sm-6">
                         <label for="roomType">Room Type</label>
-                        <select class="form-control" id="roomType">
+                        <select class="form-control" id="roomType" required>
                         </select>
                     </div>
 
@@ -102,7 +112,7 @@
 
 
     <div class="row justify-content-md-center">
-        <div class="card text-white form-card-2 invisible col-md-6" id="book-form">
+        <div class="card text-white form-card invisible col-md-6" id="book-form">
             <div class="card-header">Room Reservation</div>
             <div class="card-body">
 
@@ -111,13 +121,13 @@
 
                 <div class="row">
                     <div class="form-group col-md-6 col-sm-6">
-                        <label for="arrivalDate">Givenname</label>
-                        <input type="text" class="form-control" id="givenname"/>
+                        <label for="givenname">Givenname</label>
+                        <input type="text" class="form-control" id="givenname" required/>
                     </div>
 
                     <div class="from-group col-md-6 col-sm-6">
-                        <label for="departureDate">Surname</label>
-                        <input type="text" class="form-control" id="surname"/>
+                        <label for="surname">Surname</label>
+                        <input type="text" class="form-control" id="surname" required/>
                     </div>
                 </div>
                 <br/>
@@ -126,6 +136,82 @@
                     <button class="btn btn-light col-md-8 col-sm-8" onClick="bookRoomCommand()">Book Now!</button>
 
                     <button class="btn btn-secondary col-md-8 col-sm-8" onClick="goBackToForm()">Change selection
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card invisible col-md-6" id="alternatives-form">
+            <div class="card-header">Room Reservation</div>
+            <div class="card-body">
+
+
+                <p id="alternativesText">Your room is not available! </p>
+
+                <div class="row" id="#alternatives">
+
+                </div>
+                <br/>
+
+                <div class="row">
+                    <button class="btn btn-secondary col-md-8 col-sm-8" onClick="goBackToForm()">Change selection
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card invisible col-md-6" id="login-form">
+            <div class="card-header">Login to manage rooms</div>
+            <div class="card-body">
+
+                <div class="col-md-10 col-sm-10">
+                    <label for="password">Please enter password to enter admin page:</label>
+                    <input type="password" class="form-control" id="password" required/>
+                </div>
+
+                <br/>
+
+                <div class="row">
+                    <button class="btn btn-light col-md-8 col-sm-8" onClick="login()">Login
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card invisible col-md-6" id="add-rooms-form">
+            <div class="card-header">Add new room type</div>
+            <div class="card-body ">
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-7">
+                        <label for="newType">Room Type:</label>
+                        <input type="number" class="form-control" id="newType" required/>
+                    </div>
+
+                    <div class="col-md-4 col-sm-7">
+                        <label for="newType"># Rooms:</label>
+                        <input type="number" class="form-control" id="amount" required/>
+                    </div>
+
+                    <div class="col-md-4 col-sm-7">
+                        <label for="price">Price:</label>
+                        <input type="number" class="form-control" id="price" required/>
+                    </div>
+
+                </div>
+                <br/>
+
+                <div class="row">
+                    <button class="btn btn-light col-md-8 col-sm-8" onClick="addRoom()">Add Room
                     </button>
                 </div>
 

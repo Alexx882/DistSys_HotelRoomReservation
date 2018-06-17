@@ -4,6 +4,8 @@
 
 // The root URL for the RESTful services
 
+var pageInitialized = false;
+
 var rootURL = "http://localhost:8080/DistSys_HotelRoomReservation_war_exploded/";
 //var rootURL = "http://localhost:8080/DistSys_HotelRoom_war_exploded/";
 var arrivalDate;
@@ -13,11 +15,119 @@ var givenname;
 var surname;
 
 $(document).ready(function () {
-    document.getElementById("arrivalDate").valueAsDate = new Date();
-    document.getElementById("departureDate").valueAsDate = new Date();
 
-    listRoomTypes();
+        if(pageInitialized) return;
+        pageInitialized = true;
+        document.getElementById("arrivalDate").valueAsDate = new Date();
+        document.getElementById("departureDate").valueAsDate = new Date();
+
+        listRoomTypes();
+        adjustVisibilities("reservation");
 });
+
+function showBookForm() {
+    adjustVisibilities("book");
+
+    $('#availableText').html('The room of type ' + $('#roomType option:selected').text() + " is from " + arrivalDate.getDate() + "." +
+        arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to " + departureDate.getDate() + "." +
+        departureDate.getMonth() + "." + departureDate.getFullYear() + " still available!");
+}
+
+function showAlternativesForm() {
+
+    adjustVisibilities("alternatives");
+
+    $('#alternativesText').html('The room of type ' + $('#roomType option:selected').text() + " for the requested period (from "
+        + arrivalDate.getDate() + "." +  arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to "
+        + departureDate.getDate() + "." + departureDate.getMonth() + "." + departureDate.getFullYear() + ") is not available. " +
+        "Here are some alternatives:");
+}
+
+function goBackToForm() {
+    adjustVisibilities("reservation");
+}
+
+function showAdminLogin() {
+    adjustVisibilities("adminLogin");
+}
+
+function login() {
+
+    var pass = document.getElementById('password').value;
+    if(pass == "admin") {
+
+        adjustVisibilities("addRooms");
+    } else {
+        //invalid;
+
+        $("#password").addClass('invalid');
+    }
+}
+
+function addRoom() {
+    var type = document.getElementById('newType').value;
+    var amount = document.getElementById('amount').value;
+    var price = document.getElementById('price').value;
+
+    $("#newType").removeClass('invalid');
+    $("#amount").removeClass('invalid');
+    $("#price").removeClass('invalid');
+
+    console.log(amount);
+    if(type != "" && amount != "" && price != "") {
+
+        var data = buildRoomUpdateRequest(type, amount, price);
+        updateRoomInfosServer(data); //does not work for some reason
+    } else {
+        if(type == "") {
+
+            $("#newType").addClass('invalid');
+        }
+        if(amount == "") {
+
+            $("#amount").addClass('invalid');
+        }
+        if(price == "") {
+
+            $("#price").addClass('invalid');
+        }
+    }
+}
+
+function adjustVisibilities(type) {
+    //might seem really silly, but it's not stupid if it works :)
+    $("#book-form").removeClass('invisible').addClass('invisible');
+    $("#alternatives-form").removeClass('invisible').addClass('invisible');
+    $("#reservation-form").removeClass('invisible').addClass('invisible');
+    $("#login-form").removeClass('invisible').addClass('invisible');
+    $("#add-rooms-form").removeClass('invisible').addClass('invisible');
+
+    switch (type) {
+        case "reservation":
+            $("#reservation-form").removeClass('invisible');
+            $("#arrivalDate").removeClass('invalid');
+            $("#departureDate").removeClass('invalid');
+            break;
+        case "book":
+            $("#book-form").removeClass('invisible');
+            $("#givenname").removeClass('invalid');
+            $("#surname").removeClass('invalid');
+            break;
+        case "alternatives":
+            $("#alternatives-form").removeClass('invisible');
+            break;
+        case "adminLogin":
+            $("#login-form").removeClass('invisible');
+            $("#password").removeClass('invalid');
+            break;
+        case "addRooms":
+            $("#add-rooms-form").removeClass('invisible');
+            $("#newType").removeClass('invalid');
+            $("#amount").removeClass('invalid');
+            $("#price").removeClass('invalid');
+            break;
+    }
+}
 
 function checkAvailabilityCommand() {
     arrivalDate = new Date(document.getElementById('arrivalDate').value);
@@ -28,16 +138,10 @@ function checkAvailabilityCommand() {
 
     if (departureDate < arrivalDate) {
         //invalid
+        $("#arrivalDate").addClass('invalid');
+        $("#departureDate").addClass('invalid');
+
     } else {
-        $("#reservation-form").addClass('invisible');
-        $("#book-form").removeClass('invisible');
-        $('#book-form').addClass('visible');
-
-        $('#availableText').html('The room of type ' + $('#roomType option:selected').text() + " is from " + arrivalDate.getDate() + "." +
-            arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to " + departureDate.getDate() + "." +
-            departureDate.getMonth() + "." + departureDate.getFullYear() + " still available!");
-
-        // try to post this info on server
         // todo load id from room type
         var request = buildAvailabilityRequest("1", arrivalDate.toJSON(), departureDate.toJSON());
 
@@ -45,26 +149,23 @@ function checkAvailabilityCommand() {
             if (result.isRoomAvailable) {
                 var availableRooms = result.numAvailableRooms;
                 console.log("available: ", availableRooms);
-                // todo show #book-form
+                showBookForm();
             } else {
                 console.log("not available.");
                 var alternatives = result.alternativeRooms;
-                // todo show alternatives
+                console.log(result.alternativeRooms);
+                showAlternativesForm();
             }
         });
     }
 }
 
-function goBackToForm() {
-    $("#book-form").addClass('invisible');
-    $("#reservation-form").removeClass('invisible');
-    $('#reservation-form').addClass('visible');
-}
-
 function bookRoomCommand() {
     givenname = document.getElementById('givenname').value;
     surname = document.getElementById('surname').value;
-    console.log(givenname + " ");
+
+    $("#givenname").removeClass('invalid');
+    $("#surname").removeClass('invalid');
 
     if (givenname != "" && surname != "") {
 
@@ -73,7 +174,14 @@ function bookRoomCommand() {
 
 
     } else {
-        //not valid
+        if (givenname == "") {
+
+            $("#givenname").addClass('invalid');
+            //invalid
+        }
+        if (surname == "") {
+            $("#surname").addClass('invalid');
+        }
     }
 }
 
