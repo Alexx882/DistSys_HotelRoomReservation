@@ -6,6 +6,7 @@ import communication.AvailabilityResponse;
 import communication.BookingRequest;
 import database.DatabaseRepository;
 import database.DummyRepos;
+import database.SqlRepos;
 import models.HotelRoom;
 import models.Recommendation;
 import models.RoomType;
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class HotelRoomManager {
 
-    private DatabaseRepository dbRepos = new DummyRepos();
+    private DummyRepos dbRepos = new DummyRepos();
 
     /**
      * Updates the RoomType.

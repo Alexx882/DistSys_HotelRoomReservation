@@ -8,6 +8,7 @@ import controllers.HotelRoomManager;
 import controllers.HotelSecurityManager;
 import database.DatabaseRepository;
 import database.DummyRepos;
+import database.SqlRepos;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,12 +16,12 @@ import javax.ws.rs.core.Response;
 
 @Path("/roomtypes")
 public class RoomTypeService {
-    private DatabaseRepository repos;
+    private SqlRepos repos;
     private HotelSecurityManager securityManager;
     private HotelRoomManager roomManager;
 
     public RoomTypeService() {
-        repos = new DummyRepos();
+        repos = new SqlRepos();
         securityManager = new HotelSecurityManager();
         roomManager = new HotelRoomManager();
     }

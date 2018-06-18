@@ -1,5 +1,7 @@
 import communication.BookingRequest;
+import database.SqlRepos;
 import jdk.nashorn.internal.objects.annotations.Getter;
+import models.RoomtypesEntity;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -30,12 +32,20 @@ public class HelloWorld {
     @Path("/test")
     @Produces(MediaType.APPLICATION_JSON)
     public Response test() {
+        SqlRepos repos = new SqlRepos();
+
+        RoomtypesEntity r = repos.getRoomTypes().get(0);
+
+
+
+        /*
         BookingRequest r = new BookingRequest();
         r.typeId = 2;
         r.firstName = "peter";
         r.lastName = "bauer";
         r.startDate = new Date();
         r.endDate = new Date();
+        */
 
         return Response.ok(r, MediaType.APPLICATION_JSON).build();
     }
