@@ -19,7 +19,7 @@ public class SqlRepos  {
 
         session.beginTransaction();
 
-        Query q = session.createQuery("From roomtypes ");
+        Query q = session.createQuery("From models.RoomtypesEntity ");
         List<RoomtypesEntity> rooms;
         rooms=q.list();
         session.getTransaction().commit();
@@ -33,27 +33,25 @@ public class SqlRepos  {
 
 
     //@Override
-    public RoomType getRoomType(int id) {
+    public RoomtypesEntity getRoomType(int id) {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         session.beginTransaction();
 
-        Query q = session.createQuery("From roomtypes r where r.id="+id);
+        Query q = session.createQuery("From models.RoomtypesEntity r where r.id="+id);
         List<RoomtypesEntity> rooms;
         rooms=q.list();
         session.getTransaction().commit();
         session.close();
 
-
-        //return rooms.get(0);
-        return null;
+        return rooms.get(0);
 
     }
 
     //roomtype update
 
     //delete
-    public void updateRoomType(int id,RoomtypesEntity r) {
+    public void updateRoomType(RoomtypesEntity r) {
 
             Session session = HibernateUtil.getSessionFactory().openSession();
 
@@ -72,7 +70,7 @@ public class SqlRepos  {
 
             session.beginTransaction();
 
-            Query q = session.createQuery("delete from roomtypes r where r.id=" + id);
+            Query q = session.createQuery("delete from models.RoomtypesEntity r where r.id=" + id);
 
             q.executeUpdate();
             session.getTransaction().commit();
@@ -88,7 +86,7 @@ public class SqlRepos  {
 
         session.beginTransaction();
 
-        Query q = session.createQuery("From bookings ");
+        Query q = session.createQuery("From models.BookingsEntity ");
         List<BookingsEntity> bookings;
         bookings=q.list();
         session.getTransaction().commit();
@@ -123,3 +121,5 @@ public class SqlRepos  {
 
 
 }
+
+

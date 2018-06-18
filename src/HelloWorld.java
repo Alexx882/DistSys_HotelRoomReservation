@@ -1,6 +1,7 @@
 import communication.BookingRequest;
 import database.SqlRepos;
 import jdk.nashorn.internal.objects.annotations.Getter;
+import models.BookingsEntity;
 import models.RoomtypesEntity;
 
 import javax.ws.rs.GET;
@@ -12,8 +13,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
+import java.sql.Date;
 
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("")
@@ -34,7 +36,7 @@ public class HelloWorld {
     public Response test() {
         SqlRepos repos = new SqlRepos();
 
-        RoomtypesEntity r = repos.getRoomTypes().get(0);
+        RoomtypesEntity r = repos.getRoomType(1);
 
 
 
@@ -46,7 +48,22 @@ public class HelloWorld {
         r.startDate = new Date();
         r.endDate = new Date();
         */
+        //RoomtypesEntity r1 = new RoomtypesEntity();
+        //r1.setPrice(15);
+        //r1.setName("Testinsert");
+        //r1.setNumberOfRooms(15);
+        //repos.updateRoomType(r1);
 
-        return Response.ok(r, MediaType.APPLICATION_JSON).build();
+
+
+        //  repos.deleteRoomType(0);
+        //BookingsEntity b = new BookingsEntity();
+        //b.setFirstname("Philipp");
+        //b.setLastname("Mödritscher");
+        //b.setArrivalDate(new Timestamp(System.currentTimeMillis()));
+        //b.setDepartureDate(new Timestamp(System.currentTimeMillis()));
+       // repos.book(b);
+        BookingsEntity b1 = repos.getBookings().get(0);
+        return Response.ok(b1, MediaType.APPLICATION_JSON).build();
     }
 }
