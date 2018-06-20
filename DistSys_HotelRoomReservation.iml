@@ -36,7 +36,7 @@
     <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/mysql-connector-java-5.1.46.jar!/" />
+          <root url="jar://$MODULE_DIR$/mysql-connector-java-5.1.46.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
