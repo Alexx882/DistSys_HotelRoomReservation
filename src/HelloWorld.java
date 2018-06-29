@@ -1,6 +1,4 @@
-import communication.BookingRequest;
 import database.SqlRepos;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import models.BookingsEntity;
 import models.RoomtypesEntity;
 
@@ -9,13 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.sql.Date;
 
 // The Java class will be hosted at the URI path "/helloworld"
 @Path("")

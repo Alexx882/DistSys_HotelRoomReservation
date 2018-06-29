@@ -2,7 +2,6 @@ package database;
 
 
 import models.BookingsEntity;
-import models.RoomType;
 import models.RoomtypesEntity;
 import org.hibernate.Query;
 import org.hibernate.classic.Session;

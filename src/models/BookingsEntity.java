@@ -8,6 +8,7 @@ import java.util.Objects;
 @Table(name = "bookings", schema = "hotel_rooms", catalog = "")
 public class BookingsEntity {
     private int id;
+    private int roomtypeId;
     private String firstname;
     private String lastname;
     private Timestamp arrivalDate;
@@ -21,6 +22,16 @@ public class BookingsEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "roomtypeId")
+    public int getRoomtypeId() {
+        return roomtypeId;
+    }
+
+    public void setRoomtypeId(int roomtypeId) {
+        this.roomtypeId = roomtypeId;
     }
 
     @Basic
@@ -69,6 +80,7 @@ public class BookingsEntity {
         if (o == null || getClass() != o.getClass()) return false;
         BookingsEntity that = (BookingsEntity) o;
         return id == that.id &&
+                roomtypeId == that.roomtypeId &&
                 Objects.equals(firstname, that.firstname) &&
                 Objects.equals(lastname, that.lastname) &&
                 Objects.equals(arrivalDate, that.arrivalDate) &&
@@ -78,6 +90,6 @@ public class BookingsEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, firstname, lastname, arrivalDate, departureDate);
+        return Objects.hash(id, roomtypeId, firstname, lastname, arrivalDate, departureDate);
     }
 }
