@@ -1,4 +1,4 @@
 .idea/vcs.xml
 .idea/workspace.xml
-lib/
+# lib/ keep libs
 out/
