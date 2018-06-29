@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Room Reservation</title>
+
+    <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+
+    <script src="rest_client.js"></script>
+
+    <script>
+        function checkAvail() {
+            var avRequest =
+                buildAvailabilityRequest(2, "2018-06-05T13:27", "2018-06-05T13:27");
+            checkAvailabilityServer(avRequest, function (response) {
+                alert('Success: ' + JSON.stringify(response));
+            });
+        }
+
+        function book() {
+            var boRequest =
+                buildBookingRequest(2, "2018-06-05T13:27",
+                    "2018-06-05T13:27", "peter", "Bauer");
+            bookRoomServer(boRequest, function (response) {
+                alert('Success: ' + JSON.stringify(response));
+            });
+        }
+
+        function updateRooms() {
+            var adRequest =
+                buildRoomUpdateRequest(2, 10, 5.7);
+            updateRoomInfosServer(adRequest, function (response) {
+                alert('Success: ' + JSON.stringify(response));
+            });
+        }
+    </script>
+
+
+    <script src="rest_client.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="styles.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Quicksand" rel="stylesheet">
+</head>
+<body>
+<!--
+<input type="submit" value="Get Room List" onclick="listRooms()">
+<br>
+<input type="submit" value="Get RoomTypes List" onclick="listRoomTypes()">
+<br>
+<input type="text" id="id"> <input type="submit"
+                                   value="Get Room from ID" onclick="getRoom(0)">
+<br>
+<input type="text" id="id2"> <input type="submit"
+                                    value="Get RoomType by ID" onclick="getRoomType(0)">
+<br>
+
+<input type="submit" value="Set RoomType" onclick="updateRooms()">
+<br/>
+<input type="submit" value="check if booking is available!" onclick="checkAvail()">
+<br>
+<input type="submit" value="Try to Book!" onclick="book()">
+<br>
+
+
+<div id="result"></div> -->
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card-1 col-md-6" id="reservation-form">
+            <div class="card-header">Room Reservation</div>
+            <div class="card-body">
+
+                <div class="row">
+                    <div class="form-group col-md-6 col-sm-6">
+                        <label for="arrivalDate">Arrival Date</label>
+                        <input type="date" class="form-control" id="arrivalDate"/>
+                    </div>
+
+                    <div class="from-group col-md-6 col-sm-6">
+                        <label for="departureDate">Departure Date</label>
+                        <input type="date" class="form-control" id="departureDate"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-6 col-sm-6">
+                        <label for="roomType">Room Type</label>
+                        <select class="form-control" id="roomType">
+                        </select>
+                    </div>
+
+                    <button class="btn btn-light col-md-8 col-sm-8" onClick="checkAvailabilityCommand()">Check
+                        Availability
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card-2 invisible col-md-6" id="book-form">
+            <div class="card-header">Room Reservation</div>
+            <div class="card-body">
+
+
+                <p id="availableText">Your room is still available! </p>
+
+                <div class="row">
+                    <div class="form-group col-md-6 col-sm-6">
+                        <label for="arrivalDate">Givenname</label>
+                        <input type="text" class="form-control" id="givenname"/>
+                    </div>
+
+                    <div class="from-group col-md-6 col-sm-6">
+                        <label for="departureDate">Surname</label>
+                        <input type="text" class="form-control" id="surname"/>
+                    </div>
+                </div>
+                <br/>
+
+                <div class="row">
+                    <button class="btn btn-light col-md-8 col-sm-8" onClick="bookRoomCommand()">Book Now!</button>
+
+                    <button class="btn btn-secondary col-md-8 col-sm-8" onClick="goBackToForm()">Change selection
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="footer">
+    © Palemöstures
+</div>
+
+</body>
+</html>
