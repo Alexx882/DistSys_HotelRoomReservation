@@ -30,8 +30,9 @@ public class HotelRoomManager {
      * @param numberOfRooms: Number of Available Rooms (new) for Room Type
      * @param prize: (New) Price of RoomType
      */
-    public void updateRoomProperties(int typeId, int numberOfRooms, double prize) {
+    public void updateRoomType(int typeId, String name, int numberOfRooms, double prize) {
         //update Room Props
+        // todo name is new parameter
 
         RoomType targetRoomType = dbRepos.getRoomType(typeId);
 
@@ -147,6 +148,15 @@ public class HotelRoomManager {
        // response.numAvailableRooms = 5;
 
         return response;
+    }
+
+    public void removeRoomType(int typeId) {
+        // todo remove a roomtype from the repos
+    }
+
+    public int addRoomType(String name, int numberOfRooms, double price) {
+        // todo add a new roomtype and return new id
+        return 1;
     }
 
     /*

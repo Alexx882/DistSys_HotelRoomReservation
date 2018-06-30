@@ -1,6 +1,5 @@
 package models;
 
-// TODO model from db
 public class RoomType {
     private int id;
     private String name;

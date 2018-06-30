@@ -17,7 +17,7 @@ GET /roomtypes          - list of all roomtypes
 
 GET /roomtypes/{id}     - roomtype with ID
 
-POST /roomtypes         - create/update a roomtype
+POST /roomtypes         - creates a roomtype and returns the new ID from the db
                           uses communication.AdminRequest (password is currently "admin"), eg:
 
 ```javascript 
@@ -25,9 +25,16 @@ POST /roomtypes         - create/update a roomtype
     "password": "admin",
     "typeId": 2,
     "numberOfRooms": 2,
-    "prize": 5.7
+    "price": 5.7,
+    "name": "presidential"
 }
 ```
+
+DELETE /roomtypes/{id}  - delete a roomtype with ID
+                          uses the AdminRequest only to check the credentials
+                          
+PUT /roomtypes/{id}     - update a roomtype with ID
+                          uses the AdminRequest
                           
 POST /roomtypes/booking - (try to) book a roomtype
                           uses communication.BookingRequest, eg:
