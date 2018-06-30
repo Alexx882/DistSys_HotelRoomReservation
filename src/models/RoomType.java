@@ -3,8 +3,9 @@ package models;
 // TODO model from db
 public class RoomType {
     private int id;
-    private int numberOfRooms;
-    private double prize;
+    private String name;
+    private Double price;
+    private Integer numberOfRooms;
 
     public RoomType(int id) {
         this.id = id;
@@ -14,19 +15,32 @@ public class RoomType {
         return id;
     }
 
-    public double getPrize() {
-        return prize;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setPrize(double prize) {
-        this.prize = prize;
+    public String getName() {
+
+        return name;
     }
 
-    public int getNumberOfRooms() {
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Integer getNumberOfRooms() {
         return numberOfRooms;
     }
 
-    public void setNumberOfRooms(int numberOfRooms) {
+    public void setNumberOfRooms(Integer numberOfRooms) {
         this.numberOfRooms = numberOfRooms;
     }
 }

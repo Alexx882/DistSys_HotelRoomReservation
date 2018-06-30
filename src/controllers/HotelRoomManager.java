@@ -35,7 +35,7 @@ public class HotelRoomManager {
 
         RoomType targetRoomType = dbRepos.getRoomType(typeId);
 
-        targetRoomType.setPrize(prize);
+        targetRoomType.setPrice(prize);
         targetRoomType.setNumberOfRooms(numberOfRooms);
 
     }
