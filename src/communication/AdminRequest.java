@@ -15,5 +15,8 @@ public class AdminRequest {
     public int numberOfRooms;
 
     @XmlElement
-    public double prize;
+    public double price;
+
+    @XmlElement
+    public String name;
 }

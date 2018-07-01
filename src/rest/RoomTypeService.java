@@ -39,7 +39,57 @@ public class RoomTypeService {
     }
 
     @POST
-    public Response setAvailabilty(AdminRequest request) {
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addRoomType(AdminRequest request) {
+        Response possibleError = validateAdminRequest(request);
+        if (possibleError != null)
+            return possibleError;
+
+        // add a new roomtype
+        int newId = roomManager.addRoomType(request.name, request.numberOfRooms, request.price);
+
+        // return id
+        return Response.ok(newId).build();
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response deleteRoomType(@PathParam("id") int id, AdminRequest request) {
+        Response possibleError = validateAdminRequest(request);
+        if (possibleError != null)
+            return possibleError;
+
+        // remove the roomtype
+        roomManager.removeRoomType(id);
+
+        // return 204
+        return Response.noContent().build();
+    }
+
+    @PUT
+    @Path("{id}")
+    public Response updateRoomType(@PathParam("id") int id, AdminRequest request) {
+        Response possibleError = validateAdminRequest(request);
+        if (possibleError != null)
+            return possibleError;
+
+        if (request.typeId != id)
+            // why would you do that
+            return Response.status(Response.Status.BAD_REQUEST).build();
+
+        // update a roomtype
+        roomManager.updateRoomType(request.typeId, request.name, request.numberOfRooms, request.price);
+
+        // return 204
+        return Response.noContent().build();
+    }
+
+    /**
+     * Checks if the password is correct.
+     * @param request
+     * @return
+     */
+    private Response validateAdminRequest(AdminRequest request) {
         if (request == null)
             return Response.status(Response.Status.BAD_REQUEST).build();
 
@@ -47,11 +97,8 @@ public class RoomTypeService {
         if (!securityManager.validCredentials(request.password))
             return Response.status(Response.Status.FORBIDDEN).build();
 
-        // update the information as desired
-        roomManager.updateRoomProperties(request.typeId, request.numberOfRooms, request.prize);
-
-        // return 204
-        return Response.noContent().build();
+        // else
+        return null;
     }
 
     @POST
