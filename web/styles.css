@@ -65,21 +65,23 @@ body {
     text-align: right;
     margin: auto;
 }
+
 .manage-rooms-button {
-    background: transparent;
-    border: none;
-    color: #ffffff;
     text-decoration: underline;
-}
-.manage-rooms-button:hover, .logo-button:hover {
-    color: antiquewhite;
-    cursor: pointer;
 }
 
 .logo-button {
     font-size: 26pt;
     font-family: 'Amatic SC', cursive;
+}
+
+.borderless-button {
     background: transparent;
     border: none;
     color: #ffffff;
+}
+
+.borderless-button:hover {
+    color: antiquewhite;
+    cursor: pointer;
 }
