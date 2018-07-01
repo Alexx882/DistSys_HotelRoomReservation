@@ -7,12 +7,13 @@ import communication.BookingRequest;
 import database.DatabaseRepository;
 import database.DummyRepos;
 import database.SqlRepos;
-import models.HotelRoom;
-import models.Recommendation;
-import models.RoomType;
+import models.*;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -21,7 +22,8 @@ import java.util.List;
 
 public class HotelRoomManager {
 
-    private DummyRepos dbRepos = new DummyRepos();
+    //private DummyRepos dbRepos = new DummyRepos();
+    private SqlRepos dbRepos = new SqlRepos();
 
     /**
      * Updates the RoomType.
@@ -29,15 +31,16 @@ public class HotelRoomManager {
      *
      * @param typeId: id of Room Type
      * @param numberOfRooms: Number of Available Rooms (new) for Room Type
-     * @param prize: (New) Price of RoomType
+     * @param price: (New) Price of RoomType
      */
-    public void updateRoomProperties(int typeId, int numberOfRooms, double prize) {
+    public void updateRoomProperties(int typeId, String name, int numberOfRooms, double price) {
         //update Room Props
 
-        RoomType targetRoomType = dbRepos.getRoomType(typeId);
+        RoomtypesEntity targetRoomType = dbRepos.getRoomType(typeId);
 
-        targetRoomType.setPrize(prize);
+        targetRoomType.setName(name);
         targetRoomType.setNumberOfRooms(numberOfRooms);
+        targetRoomType.setPrice(price);
 
     }
 
@@ -56,9 +59,15 @@ public class HotelRoomManager {
             try{
                 //ToDo: when dbRepos updated, check if there is insert or book method for room
                // dbRepos.bookRoom(request.typeId, request.startDate, request.endDate);
-                RoomType targetRoomType = dbRepos.getRoomType(request.typeId);
-                if (targetRoomType.getNumberOfRooms()>0){
-                    targetRoomType.setNumberOfRooms(targetRoomType.getNumberOfRooms()-1);
+                RoomtypesEntity targetRoomType = dbRepos.getRoomType(request.typeId);
+
+                //check if enough rooms available
+                if (getNoAvailableRooms(request.typeId, request.startDate, request.endDate)>0){
+
+                    BookingsEntity be = new BookingsEntity();
+                    be.setArrivalDate((Timestamp) request.startDate);
+
+                    dbRepos.book(be);
                     return true;
                 } else {
                     return false;
@@ -68,26 +77,7 @@ public class HotelRoomManager {
                 return false;
             }
 
-        }/* else if (getNoAvailableRooms(request.typeId, request.startDate, request.endDate) == 0) {
-            // no room available, give recommendations
-
-            List<Recommendation> recommendations = getRecommendations(request.typeId, request.startDate, request.endDate);
-
-            if (recommendations.size() > 0) {
-                String response = "Sorry, but we have not found any free rooms in category "+request.typeId+" between "+request.startDate.toString()+" and "+request.endDate.toString()+".";
-                response+="\nWe recommend the following available rooms:\n";
-
-                for (Recommendation i:recommendations){
-                    response+=i.toString();
-                    response+="\n";
-                }
-
-            } else {
-                return false;
-            }
-
-
-        } */else {
+        }else {
             //an error occured; booking failed - return false
             return false;
         }
@@ -104,21 +94,33 @@ public class HotelRoomManager {
      */
     private int getNoAvailableRooms(int typeId, Date startDate, Date endDate) {
 
-        //ToDo : When DatabaseRepos is updated, check if room is booked from day x to day y
+        //Done : When DatabaseRepos is updated, check if room is booked from day x to day y
+        // Used joda time bc easy overlapping check
 
-        int availableRooms;
+        int availableRooms=dbRepos.getRoomType(typeId).getNumberOfRooms();
+        int bookedRooms = 0;
 
-        /*List<HotelRoom> allRooms = dbRepos.getRooms();
+        List<BookingsEntity> be = dbRepos.getBookings();
 
-        for (HotelRoom i:allRooms){
-           // if (!i.isBooked(startDate, endDate) && i.getTypeId()==typeId){
-                availableRooms++;
-           // }
-        }*/
+        for (BookingsEntity b:be){
+            if (b.getRoomtypeId()==typeId){
+                DateTime requestStart = new DateTime(startDate);
+                DateTime requestEnd = new DateTime(endDate);
 
-        RoomType targetRoom = dbRepos.getRoomType(typeId);
+                DateTime bookingStart = new DateTime(b.getArrivalDate());
+                DateTime bookingEnd = new DateTime(b.getDepartureDate());
 
-        availableRooms=targetRoom.getNumberOfRooms();
+                Interval requestInterval = new Interval(requestStart, requestEnd);
+                Interval bookingInterval = new Interval(bookingStart, bookingEnd);
+
+                if (requestInterval.overlaps(bookingInterval)){
+                    bookedRooms++;
+                }
+
+            }
+        }
+
+        availableRooms = availableRooms - bookedRooms;
 
         return availableRooms;
     }
@@ -127,18 +129,20 @@ public class HotelRoomManager {
 
         AvailabilityResponse response = new AvailabilityResponse(request);
 
-        if (dbRepos.getRoomType(request.typeId).getNumberOfRooms()>0){
+        int avRooms = getNoAvailableRooms(request.typeId, request.startDate, request.endDate);
+
+        if (avRooms>0){
             response.isRoomAvailable = true;
-            response.numAvailableRooms = dbRepos.getRoomType(request.typeId).getNumberOfRooms();
+            response.numAvailableRooms = avRooms;
         } else {
             response.isRoomAvailable = false;
 
             //fill list of alternatives
 
-            List<RoomType> roomTypes = dbRepos.getRoomTypes();
+            List<RoomtypesEntity> roomTypes = dbRepos.getRoomTypes();
 
-            for (RoomType i:roomTypes){
-                if (i.getNumberOfRooms()>0){
+            for (RoomtypesEntity i:roomTypes){
+                if (getNoAvailableRooms(i.getId(), request.startDate, request.endDate)>0){
                     response.alternativeRooms.add(i.getId());
                 }
             }
@@ -150,46 +154,31 @@ public class HotelRoomManager {
         return response;
     }
 
-    /*
-
-    Commented out bc not in use. Maybe some fragments will help later, so keep I'll keep it here ATM
-
-    public List<Recommendation> getRecommendations(int typeId, Date startDate, Date endDate) {
-        //Builds recommendation List & return it
-
-        List<Recommendation> recommendations = new ArrayList<>();
-        List<RoomType> roomTypes = dbRepos.getRoomTypes();
-
-
-        Calendar startCal = Calendar.getInstance(),
-                endCal = Calendar.getInstance();
-
-        startCal.setTime(startDate);
-        endCal.setTime(endDate);
-
-        startCal.add(Calendar.DATE, -7);
-        endCal.add(Calendar.DATE, -7);
-
-
-        for (int j=0; j<16; j++){
-
-
-             //Checks for selected Period +/- 7 Days if something is available in ANY category
-
-
-            for (RoomType k : roomTypes){
-                if (getNoAvailableRooms(k.getId(), startCal.getTime(), endCal.getTime()) > 0 ){
-                    recommendations.add(new Recommendation(k.getId(), startCal.getTime(), endCal.getTime()));
-                }
-            }
-            startCal.add(Calendar.DATE, 1);
-            endCal.add(Calendar.DATE, 1);
-        }
-
-
-        return recommendations;
-
+    public void removeRoomType(int typeId){
+        dbRepos.deleteRoomType(typeId);
     }
 
-*/
+    public int addRoomType(String name, int numberOfRooms, double price){
+        int typeId=-1;
+
+        List<RoomtypesEntity> rte = dbRepos.getRoomTypes();
+        int maxRoomType=-1;
+        for (RoomtypesEntity rt:rte){
+            if (rt.getId()>maxRoomType) maxRoomType=rt.getId();
+        }
+
+        maxRoomType++;
+
+        RoomtypesEntity newRte = new RoomtypesEntity();
+        newRte.setId(maxRoomType);
+        newRte.setPrice(price);
+        newRte.setNumberOfRooms(numberOfRooms);
+        newRte.setName(name);
+
+        //no clue if this will work. Maybe provide an createRoomType Method in dbRepos ?
+
+        dbRepos.updateRoomType(newRte);
+
+        return typeId;
+    }
 }
