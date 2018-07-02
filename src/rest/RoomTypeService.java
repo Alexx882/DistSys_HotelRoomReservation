@@ -49,7 +49,8 @@ public class RoomTypeService {
             return Response.status(Response.Status.FORBIDDEN).build();
 
         // update the information as desired
-        roomManager.updateRoomProperties(request.typeId, request.numberOfRooms, request.prize);
+        // ToDo: Add Room Name!
+        roomManager.updateRoomProperties(request.typeId, "RoomName", request.numberOfRooms, request.prize);
 
         // return 204
         return Response.noContent().build();

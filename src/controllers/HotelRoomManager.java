@@ -6,6 +6,7 @@ import communication.AvailabilityResponse;
 import communication.BookingRequest;
 import database.DatabaseRepository;
 import database.DummyRepos;
+import database.MySqlRepos;
 import database.SqlRepos;
 import models.*;
 import org.joda.time.DateTime;
@@ -23,7 +24,8 @@ import java.util.List;
 public class HotelRoomManager {
 
     //private DummyRepos dbRepos = new DummyRepos();
-    private SqlRepos dbRepos = new SqlRepos();
+    //private SqlRepos dbRepos = new SqlRepos();
+    private MySqlRepos dbRepos = new MySqlRepos();
 
     /**
      * Updates the RoomType.
@@ -92,7 +94,7 @@ public class HotelRoomManager {
      * @param endDate .
      * @return returns number ov available rooms
      */
-    private int getNoAvailableRooms(int typeId, Date startDate, Date endDate) {
+    public int getNoAvailableRooms(int typeId, Date startDate, Date endDate) {
 
         //Done : When DatabaseRepos is updated, check if room is booked from day x to day y
         // Used joda time bc easy overlapping check
@@ -159,25 +161,13 @@ public class HotelRoomManager {
     }
 
     public int addRoomType(String name, int numberOfRooms, double price){
-        int typeId=-1;
 
-        List<RoomtypesEntity> rte = dbRepos.getRoomTypes();
-        int maxRoomType=-1;
-        for (RoomtypesEntity rt:rte){
-            if (rt.getId()>maxRoomType) maxRoomType=rt.getId();
-        }
+        RoomtypesEntity rte = new RoomtypesEntity();
+        rte.setName(name);
+        rte.setNumberOfRooms(numberOfRooms);
+        rte.setPrice(price);
 
-        maxRoomType++;
-
-        RoomtypesEntity newRte = new RoomtypesEntity();
-        newRte.setId(maxRoomType);
-        newRte.setPrice(price);
-        newRte.setNumberOfRooms(numberOfRooms);
-        newRte.setName(name);
-
-        //no clue if this will work. Maybe provide an createRoomType Method in dbRepos ?
-
-        dbRepos.updateRoomType(newRte);
+        int typeId = dbRepos.addRoomType(rte);
 
         return typeId;
     }
