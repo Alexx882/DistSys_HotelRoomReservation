@@ -214,8 +214,6 @@ function showBookAlternativeForm_OLD(fullId) {
 }
 
 function showBookAlternativeForm(roomtype, arr, dep) {
-    arrivalDate = arr.toLocaleDateString("de");
-    departureDate = dep.toLocaleDateString("de");
     roomTypeName = roomtype.name;
 
     showBookForm();
