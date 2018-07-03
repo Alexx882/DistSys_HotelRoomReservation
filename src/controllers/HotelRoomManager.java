@@ -9,8 +9,6 @@ import database.DummyRepos;
 import database.MySqlRepos;
 import database.SqlRepos;
 import models.*;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -106,16 +104,27 @@ public class HotelRoomManager {
 
         for (BookingsEntity b:be){
             if (b.getRoomtypeId()==typeId){
-                DateTime requestStart = new DateTime(startDate);
-                DateTime requestEnd = new DateTime(endDate);
+                if(
+                    // startDate between arrival and departure
+                    (startDate.compareTo(b.getArrivalDate()) >= 0
+                        && startDate.compareTo(b.getDepartureDate()) <= 0)
+                    // endDate between arrival and departure
+                    || (endDate.compareTo(b.getArrivalDate()) >= 0
+                        && endDate.compareTo(b.getDepartureDate()) <= 0)
+                    // start before, end after -> completely overlaps
+                    || (startDate.compareTo(b.getArrivalDate()) <= 0
+                        && endDate.compareTo(b.getDepartureDate()) >= 0)) {
 
-                DateTime bookingStart = new DateTime(b.getArrivalDate());
-                DateTime bookingEnd = new DateTime(b.getDepartureDate());
-
-                Interval requestInterval = new Interval(requestStart, requestEnd);
-                Interval bookingInterval = new Interval(bookingStart, bookingEnd);
-
-                if (requestInterval.overlaps(bookingInterval)){
+//                DateTime requestStart = new DateTime(startDate);
+//                DateTime requestEnd = new DateTime(endDate);
+//
+//                DateTime bookingStart = new DateTime(b.getArrivalDate());
+//                DateTime bookingEnd = new DateTime(b.getDepartureDate());
+//
+//                Interval requestInterval = new Interval(requestStart, requestEnd);
+//                Interval bookingInterval = new Interval(bookingStart, bookingEnd);
+//
+//                if (requestInterval.overlaps(bookingInterval)){
                     bookedRooms++;
                 }
 
