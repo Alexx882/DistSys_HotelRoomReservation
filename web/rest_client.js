@@ -175,13 +175,14 @@ function checkAvailabilityCommand() {
                 $('#alternativeOptions').html("");
 
                 var i = 0;
-                for(var n in result.alternativeRooms) {
+                for(var idx in result.alternativeRooms) {
+                    var roomtype_548894 = result.alternativeRooms[idx];
                     $('#alternativeOptions').append("<div class='row'>" +
-                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate+"</div>" +
-                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate+"</div>" +
-                        "<div class='col-md-3' id='alt-name-"+i+"'>"+n.name+"</div>" +
+                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate.toLocaleDateString("de")+"</div>" +
+                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate.toLocaleDateString("de")+"</div>" +
+                        "<div class='col-md-3' id='alt-name-"+i+"'>"+ roomtype_548894.name +"</div>" +
                         "<div class='col-md-3'> " +
-                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm(this.id)'>Book!</button>" +
+                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm(roomtype_548894, arrivalDate, departureDate)'>Book!</button>" +
                         "</div>  </div>");
                     i++;
                 }
@@ -194,7 +195,7 @@ function checkAvailabilityCommand() {
     }
 }
 
-function showBookAlternativeForm(fullId) {
+function showBookAlternativeForm_OLD(fullId) {
     var id = fullId.split('-');
 
     var arr = ($('#alt-arrivalDate-'+id[1]).html()).split('.');
@@ -204,6 +205,14 @@ function showBookAlternativeForm(fullId) {
     departureDate = new Date(dep[2], dep[1], dep[0]);
     roomTypeName = $('#alt-name-'+id[1]).html();
 
+
+    showBookForm();
+}
+
+function showBookAlternativeForm(roomtype, arr, dep) {
+    arrivalDate = arr.toLocaleDateString("de");
+    departureDate = dep.toLocaleDateString("de");
+    roomTypeName = roomtype.name;
 
     showBookForm();
 }
