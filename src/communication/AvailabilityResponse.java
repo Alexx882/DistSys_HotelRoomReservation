@@ -1,5 +1,7 @@
 package communication;
 
+import models.RoomtypesEntity;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
@@ -28,5 +30,5 @@ public class AvailabilityResponse extends AvailabilityRequest {
     public int numAvailableRooms;
 
     @XmlElement
-    public List<Integer> alternativeRooms = new ArrayList<>();
+    public List<RoomtypesEntity> alternativeRooms = new ArrayList<>();
 }
