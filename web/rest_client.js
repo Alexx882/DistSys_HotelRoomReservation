@@ -176,7 +176,11 @@ function checkAvailabilityCommand() {
 
                 var i = 0;
                 for(var idx in result.alternativeRooms) {
-                    var roomtype_548894 = result.alternativeRooms[idx];
+                    roomtype_548894 = result.alternativeRooms[idx];
+                    if(roomtype_548894 === undefined)
+                        // because JAVASCRIPT IS BULLSHIT
+                        break;
+
                     $('#alternativeOptions').append("<div class='row'>" +
                         "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate.toLocaleDateString("de")+"</div>" +
