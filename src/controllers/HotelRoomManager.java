@@ -142,7 +142,8 @@ public class HotelRoomManager {
 
             for (RoomtypesEntity i:roomTypes){
                 if (getNoAvailableRooms(i.getId(), request.startDate, request.endDate)>0){
-                    response.alternativeRooms.add(i.getId());
+                    response.alternativeRooms.add(i);
+
                 }
             }
 
