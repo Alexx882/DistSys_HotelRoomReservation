@@ -209,8 +209,9 @@ function showBookAlternativeForm_OLD(fullId) {
     showBookForm();
 }
 
-function showBookAlternativeForm(roomtype, arr, dep) {
-    roomTypeName = roomtype.name;
+function showBookAlternativeForm(roomty, arr, dep) {
+    roomTypeName = roomty.name;
+    roomType = roomty.id;
 
     showBookForm();
 }
