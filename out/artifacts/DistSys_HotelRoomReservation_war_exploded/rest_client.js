@@ -33,9 +33,9 @@ function showBookForm() {
         roomTypeName = $('#roomType option:selected').text()
     }
 
-    $('#availableText').html('The room of type ' + roomTypeName + " is from " + arrivalDate.getDate() + "." +
-        arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to " + departureDate.getDate() + "." +
-        departureDate.getMonth() + "." + departureDate.getFullYear() + " still available!");
+    $('#availableText').html('The room of type ' + roomTypeName + " is from " +
+        arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") +
+        " still available!");
 
 
     adjustVisibilities("book");
@@ -47,8 +47,7 @@ function showAlternativesForm() {
     adjustVisibilities("alternatives");
 
     $('#alternativesText').html('The room of type ' + $('#roomType option:selected').text() + " for the requested period (from "
-        + arrivalDate.getDate() + "." +  arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to "
-        + departureDate.getDate() + "." + departureDate.getMonth() + "." + departureDate.getFullYear() + ") is not available. " +
+        + arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") + ") is not available. " +
         "Here are some alternatives:");
 }
 
