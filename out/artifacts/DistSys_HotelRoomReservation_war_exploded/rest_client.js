@@ -177,16 +177,12 @@ function checkAvailabilityCommand() {
                 var i = 0;
                 for(var idx in result.alternativeRooms) {
                     var roomtype_548894 = result.alternativeRooms[idx];
-                    if(i === 4)
-                        // because JAVASCRIPT IS BULLSHIT
-                        break;
-
                     $('#alternativeOptions').append("<div class='row'>" +
                         "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-name-"+i+"'>"+ roomtype_548894.name +"</div>" +
                         "<div class='col-md-3'> " +
-                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm("+roomtype_548894+", arrivalDate, departureDate)'>Book!</button>" +
+                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm("+JSON.stringify(roomtype_548894)+", arrivalDate, departureDate)'>Book!</button>" +
                         "</div>  </div>");
                     i++;
                 }
@@ -453,14 +449,7 @@ function checkAvailabilityServer(availabilityRequest, callback) {
         crossDomain: true,
         dataType: "json",
         data: availabilityRequest,
-        success: function (result) {
-            callback(result);
-
-            $('#alternativeOptions').html();
-            for(var a in result.alternativeRooms) {
-                $('#alternativeOptions').append("<div>"+a.id+"</div>");
-            }
-        },
+        success: callback,
         error: function (result) {
             console.log(result);
         }
