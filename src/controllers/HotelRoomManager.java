@@ -54,8 +54,8 @@ public class HotelRoomManager {
             be.setRoomtypeId(request.typeId);
             be.setFirstname(request.firstName);
             be.setLastname(request.lastName);
-            be.setArrivalDate((Timestamp) request.startDate);
-            be.setDepartureDate((Timestamp) request.endDate);
+            be.setArrivalDate(getTimestamp(request.startDate));
+            be.setDepartureDate(getTimestamp(request.endDate));
 
             dbRepos.book(be);
             return true;
@@ -167,5 +167,9 @@ public class HotelRoomManager {
         /*int typeId =*/ dbRepos.updateRoomType(rte);
 
         return -1;
+    }
+
+    private Timestamp getTimestamp(java.util.Date date){
+        return date == null ? null : new java.sql.Timestamp(date.getTime());
     }
 }
