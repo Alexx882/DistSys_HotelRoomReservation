@@ -17,9 +17,10 @@ public class HelloWorld {
     @Produces({MediaType.TEXT_HTML})
     public String viewHome()throws FileNotFoundException
     {
-        return "HotelRoomManager startpage."
-                + "<br />"
-                + "<a href=http://localhost:8080/test.html>startpage from moedi</a>";
+        return "HotelRoomManager startpage.";
+        // todo get host ip
+//                + "<br />"
+//                + "<a href=http://localhost:8080/index.html>startpage from moedi</a>";
     }
 
     @GET
@@ -30,6 +31,7 @@ public class HelloWorld {
 
         RoomtypesEntity r = repos.getRoomType(1);
 
+        return Response.ok(r, MediaType.APPLICATION_JSON).build();
 
 
         /*
@@ -55,7 +57,5 @@ public class HelloWorld {
         //b.setArrivalDate(new Timestamp(System.currentTimeMillis()));
         //b.setDepartureDate(new Timestamp(System.currentTimeMillis()));
        // repos.book(b);
-        BookingsEntity b1 = repos.getBookings().get(0);
-        return Response.ok(b1, MediaType.APPLICATION_JSON).build();
     }
 }
