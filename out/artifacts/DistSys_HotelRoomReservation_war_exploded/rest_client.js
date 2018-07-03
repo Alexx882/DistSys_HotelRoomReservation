@@ -90,7 +90,7 @@ function addRoom() {
 
         var data = buildRoomUpdateRequest(type, amount, price);
         updateRoomInfosServer(data);
-        adjustVisibilities("manage");
+        adjustVisibilities("manageRooms");
 
     } else {
         if(type == "") {
@@ -177,9 +177,9 @@ function checkAvailabilityCommand() {
                 var i = 0;
                 for(var n in result.alternativeRooms) {
                     $('#alternativeOptions').append("<div class='row'>" +
-                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+n+"</div>" +
-                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+n+"</div>" +
-                        "<div class='col-md-3' id='alt-name-"+i+"'>"+n+"</div>" +
+                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate+"</div>" +
+                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate+"</div>" +
+                        "<div class='col-md-3' id='alt-name-"+i+"'>"+n.name+"</div>" +
                         "<div class='col-md-3'> " +
                         "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm(this.id)'>Book!</button>" +
                         "</div>  </div>");
@@ -523,7 +523,7 @@ function listExisitingRooms(json) {
 function jsonToList(json) {
    var list = [];
 
-    document.getElementById('roomType').options = [];
+    $('#roomType').empty();
 
     for(var n in json) {
         list.push(json[n].name) ;
