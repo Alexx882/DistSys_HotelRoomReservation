@@ -55,11 +55,7 @@ public class RoomTypeService {
 
     @DELETE
     @Path("{id}")
-    public Response deleteRoomType(@PathParam("id") int id, AdminRequest request) {
-        Response possibleError = validateAdminRequest(request);
-        if (possibleError != null)
-            return possibleError;
-
+    public Response deleteRoomType(@PathParam("id") int id) {
         // remove the roomtype
         roomManager.removeRoomType(id);
 
@@ -87,6 +83,7 @@ public class RoomTypeService {
 
     /**
      * Checks if the password is correct.
+     *
      * @param request
      * @return
      */
