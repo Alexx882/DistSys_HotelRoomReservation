@@ -8,6 +8,7 @@ import controllers.HotelRoomManager;
 import controllers.HotelSecurityManager;
 import database.DatabaseRepository;
 import database.DummyRepos;
+import database.SqlRepos;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -15,12 +16,12 @@ import javax.ws.rs.core.Response;
 
 @Path("/roomtypes")
 public class RoomTypeService {
-    private DatabaseRepository repos;
+    private SqlRepos repos;
     private HotelSecurityManager securityManager;
     private HotelRoomManager roomManager;
 
     public RoomTypeService() {
-        repos = new DummyRepos();
+        repos = new SqlRepos();
         securityManager = new HotelSecurityManager();
         roomManager = new HotelRoomManager();
     }
@@ -54,11 +55,7 @@ public class RoomTypeService {
 
     @DELETE
     @Path("{id}")
-    public Response deleteRoomType(@PathParam("id") int id, AdminRequest request) {
-        Response possibleError = validateAdminRequest(request);
-        if (possibleError != null)
-            return possibleError;
-
+    public Response deleteRoomType(@PathParam("id") int id) {
         // remove the roomtype
         roomManager.removeRoomType(id);
 
@@ -78,7 +75,7 @@ public class RoomTypeService {
             return Response.status(Response.Status.BAD_REQUEST).build();
 
         // update a roomtype
-        roomManager.updateRoomType(request.typeId, request.name, request.numberOfRooms, request.price);
+        roomManager.updateRoomProperties(request.typeId, request.name, request.numberOfRooms, request.price);
 
         // return 204
         return Response.noContent().build();
@@ -86,6 +83,7 @@ public class RoomTypeService {
 
     /**
      * Checks if the password is correct.
+     *
      * @param request
      * @return
      */

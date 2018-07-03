@@ -7,6 +7,7 @@ import controllers.HotelRoomManager;
 import controllers.HotelSecurityManager;
 import database.DatabaseRepository;
 import database.DummyRepos;
+import database.SqlRepos;
 import models.RoomType;
 
 import javax.annotation.PostConstruct;
@@ -17,7 +18,7 @@ import javax.ws.rs.core.Response;
 
 @Path("/hotelrooms")
 public class HotelRoomService {
-    private DatabaseRepository repos;
+    private DummyRepos repos;
 
     public HotelRoomService() {
         repos = new DummyRepos();

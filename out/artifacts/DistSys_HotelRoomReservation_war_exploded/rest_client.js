@@ -3,129 +3,339 @@
  */
 
 // The root URL for the RESTful services
-var rootURL = "http://localhost:8080/DistSys_HotelRoom_war_exploded/";
+
+var pageInitialized = false;
+
+var currentHost = window.location.host;
+
+var rootURL = "http://" + currentHost + "/DistSys_HotelRoomReservation_war_exploded/";
 var arrivalDate;
 var departureDate;
 var roomType;
+var roomTypeName;
 var givenname;
 var surname;
 
-//listRooms() ++++++  GET /hotelrooms - list of all hotelrooms 
+var password;
 
-//getRoom(id) ++++++  GET /hotelrooms/{id} - hotelroom with ID
+$(document).ready(function () {
 
-//listRoomTypes() ++  GET /roomtypes - list of all roomtypes
+        if(pageInitialized) return;
+        pageInitialized = true;
+        document.getElementById("arrivalDate").valueAsDate = new Date();
+        document.getElementById("departureDate").valueAsDate = new Date();
 
-//getRoomType(id) ++  GET /roomtypes/{id} - roomtype with ID
-
-//setRoomType()   ++  POST /roomtypes - create/update a roomtype uses communication.AdminRequest (password is currently "admin"), eg:
-//book() 	  ++++++  POST /roomtypes/booking
-
-$( document ).ready(function() {
-    document.getElementById("arrivalDate").valueAsDate = new Date();
-    document.getElementById("departureDate").valueAsDate = new Date();
-
-   //if i knew how the output looks like I'd like to use it as options in the #roomtype input
-    listRoomTypes();
+        adjustVisibilities("reservation");
 });
 
-// todo use checkAvailability(request, callback)
-function checkAvailability() {
-    arrivalDate = document.getElementById('arrivalDate').value;
-    departureDate = document.getElementById('departureDate').value;
-    roomType = document.getElementById('roomType').value;
-
-    console.log(window.location.pathname);
-
-    if(departureDate < arrivalDate) {
-        //invalid
-    } else {
-        $("#reservation-form").addClass('invisible');
-        $("#book-form").removeClass('invisible');
-        $('#book-form').addClass('visible');
-
-        $('#availableText').html('The room of type ' + roomType + " is from " + arrivalDate + " to " + departureDate + " still available!");
-
-
-        //try to post this info on server
-        $.ajax({
-            type: 'GET',
-            url: rootURL + 'check?arrivalDate='+arrivalDate+'&departureDate='+departureDate+'&roomType='+roomType,
-            crossDomain:    true,
-            dataType: "json",
-            success: function(result){
-                console.log(result);
-                //if result 204, show #book-form
-                //else result 200 and json with alternatives
-
-            },
-            error: function(result){
-                console.log(result);
-            }
-        });
+function showBookForm() {
+    if(roomTypeName == null) {
+        roomTypeName = $('#roomType option:selected').text()
     }
+
+    $('#availableText').html('The room of type ' + roomTypeName + " is from " + arrivalDate.getDate() + "." +
+        arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to " + departureDate.getDate() + "." +
+        departureDate.getMonth() + "." + departureDate.getFullYear() + " still available!");
+
+
+    adjustVisibilities("book");
+
+}
+
+function showAlternativesForm() {
+
+    adjustVisibilities("alternatives");
+
+    $('#alternativesText').html('The room of type ' + $('#roomType option:selected').text() + " for the requested period (from "
+        + arrivalDate.getDate() + "." +  arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to "
+        + departureDate.getDate() + "." + departureDate.getMonth() + "." + departureDate.getFullYear() + ") is not available. " +
+        "Here are some alternatives:");
 }
 
 function goBackToForm() {
-    $("#book-form").addClass('invisible');
-    $("#reservation-form").removeClass('invisible');
-    $('#reservation-form').addClass('visible');
+    adjustVisibilities("reservation");
 }
 
-// todo use bookRoom(request, callback)
-function bookRoom() {
-    givenname = document.getElementById('givenname').value;
-    surname = document.getElementById('surname').value;
-    console.log(givenname + " ");
+function showAdminLogin() {
+    adjustVisibilities("adminLogin");
+}
 
-    if(givenname != "" && surname != "") {
+function showAddRoom() {
+    adjustVisibilities("addRooms");
+}
 
-        //data as json - although typeId still int
-        var data = JSON.stringify({
-            "typeId": 1,
-            "startDate": arrivalDate,
-            "endDate": departureDate,
-            "firstName":givenname,
-            "lastName": surname
-        });
+function login() {
 
-        //post that shit
-        $.ajax({
-            type: 'POST',
-            contentType: 'application/json',
-            url: rootURL + '/roomtypes/booking',
-            dataType: "json",
-            data: data,
-            success: function (result) {
-                console.log(result);
-            },
-            error: function (result) {
-                console.log(result);
+    var pass = document.getElementById('password').value;
+    if(pass == "admin") {
+        password = pass;
+
+        adjustVisibilities("manageRooms");
+    } else {
+        //invalid;
+        $("#password").addClass('invalid');
+    }
+}
+
+function addRoom() {
+    var type = document.getElementById('newType').value;
+    var amount = document.getElementById('amount').value;
+    var price = document.getElementById('price').value;
+
+    $("#newType").removeClass('invalid');
+    $("#amount").removeClass('invalid');
+    $("#price").removeClass('invalid');
+
+    if(type != "" && amount != "" && price != "") {
+
+        var data = buildRoomUpdateRequest(type, amount, price);
+        updateRoomInfosServer(data);
+        adjustVisibilities("manageRooms");
+
+    } else {
+        if(type == "") {
+
+            $("#newType").addClass('invalid');
+        }
+        if(amount == "") {
+
+            $("#amount").addClass('invalid');
+        }
+        if(price == "") {
+
+            $("#price").addClass('invalid');
+        }
+    }
+}
+
+function adjustVisibilities(type) {
+    //might seem really silly, but it's not stupid if it works :)
+    $("#book-form").removeClass('invisible').addClass('invisible');
+    $("#alternatives-form").removeClass('invisible').addClass('invisible');
+    $("#reservation-form").removeClass('invisible').addClass('invisible');
+    $("#login-form").removeClass('invisible').addClass('invisible');
+    $("#manage-rooms-card").removeClass('invisible').addClass('invisible');
+    $("#add-rooms-form").removeClass('invisible').addClass('invisible');
+
+
+    switch (type) {
+        case "reservation":
+            $("#reservation-form").removeClass('invisible');
+            $("#arrivalDate").removeClass('invalid');
+            $("#departureDate").removeClass('invalid');
+            roomTypesToOptions();
+            break;
+        case "book":
+            $("#book-form").removeClass('invisible');
+            $("#givenname").removeClass('invalid');
+            $("#surname").removeClass('invalid');
+            break;
+        case "alternatives":
+            $("#alternatives-form").removeClass('invisible');
+            break;
+        case "adminLogin":
+            $("#login-form").removeClass('invisible');
+            $("#password").removeClass('invalid');
+            break;
+        case "manageRooms":
+            $("#manage-rooms-card").removeClass('invisible');
+            var result = listRoomTypes();
+            break;
+        case "addRooms":
+            $("#add-rooms-form").removeClass('invisible');
+            $("#newType").removeClass('invalid');
+            $("#amount").removeClass('invalid');
+            $("#price").removeClass('invalid');
+            break;
+    }
+}
+
+function checkAvailabilityCommand() {
+    arrivalDate = new Date(document.getElementById('arrivalDate').value);
+    departureDate = new Date(document.getElementById('departureDate').value);
+    roomType = document.getElementById('roomType').value;
+
+    if (departureDate < arrivalDate || arrivalDate < new Date(Date.now()-24*60*60*1000)) {
+        //invalid
+        $("#arrivalDate").addClass('invalid');
+        $("#departureDate").addClass('invalid');
+
+    } else {
+        var request = buildAvailabilityRequest(roomType, arrivalDate.toJSON(), departureDate.toJSON());
+
+        checkAvailabilityServer(request, function (result) {
+            if (result.isRoomAvailable) {
+                var availableRooms = result.numAvailableRooms;
+                console.log("available: ", availableRooms);
+                showBookForm();
+            } else {
+                console.log("not available.");
+                var alternatives = result.alternativeRooms;
+
+                $('#alternativeOptions').html("");
+
+                var i = 0;
+                for(var n in result.alternativeRooms) {
+                    $('#alternativeOptions').append("<div class='row'>" +
+                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate+"</div>" +
+                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate+"</div>" +
+                        "<div class='col-md-3' id='alt-name-"+i+"'>"+n.name+"</div>" +
+                        "<div class='col-md-3'> " +
+                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm(this.id)'>Book!</button>" +
+                        "</div>  </div>");
+                    i++;
+                }
+
+                console.log(result.alternativeRooms);
+
+                showAlternativesForm();
             }
         });
+    }
+}
+
+function showBookAlternativeForm(fullId) {
+    var id = fullId.split('-');
+
+    var arr = ($('#alt-arrivalDate-'+id[1]).html()).split('.');
+    var dep = ($('#alt-departureDate-'+id[1]).html()).split('.');
+
+    arrivalDate = new Date(arr[2], arr[1], arr[0]);
+    departureDate = new Date(dep[2], dep[1], dep[0]);
+    roomTypeName = $('#alt-name-'+id[1]).html();
+
+
+    showBookForm();
+}
+
+function bookRoomCommand() {
+    givenname = document.getElementById('givenname').value;
+    surname = document.getElementById('surname').value;
+
+    $("#givenname").removeClass('invalid');
+    $("#surname").removeClass('invalid');
+
+    if (givenname != "" && surname != "") {
+
+        var data = buildBookingRequest(roomType, arrivalDate.toJSON(), departureDate.toJSON(), givenname, surname);
+        bookRoomServer(data, function(result){});
+
+
     } else {
-        //not valid
+        if (givenname == "") {
+            $("#givenname").addClass('invalid');
+        }
+        if (surname == "") {
+            $("#surname").addClass('invalid');
+        }
     }
 }
 
 
-// todo remove: mödi stuff; some things still useful, some not :D
+function editRoomType(button) {
+    var id = button.id;
 
+    var name =  $("#name-"+id).html();
+    var amount =  $("#amount-"+id).html();
+    var price = $("#price-"+id).html();
+
+    $("#name-"+id).html("<input type='text' class='form-control' id='name-input-"+id+"' required value='"+name+"'/>");
+    $("#amount-"+id).html("<input type='number' step='1' class='form-control' id='amount-input-"+id+"' value='"+amount+"' required/>");
+    $("#price-"+id).html("<input type='number' step='any' class='form-control' id='price-input-"+id+"' value='"+price+"' required/>");
+    $('#button-'+id).html("<button class='borderless-button col-md-12' onClick='saveRoomType("+ id+ ")'>Ok</button>")
+}
+
+function saveRoomType(id) {
+
+    var name = $("#name-input-"+id).val();
+    var amount = $('#amount-input-'+id).val();
+    var price = $('#price-input-'+id).val();
+
+    //request: "updateRoom/{id}"
+   var data = buildExistingRoomUpdateRequest(name, amount, price, id);
+   updateExistingRoomType(id, data);
+
+   // $('#existing-rooms').html("");
+   // listRoomTypes();
+
+    $("#name-"+id).html(name);
+  $("#amount-"+id).html(amount);
+  $("#price-"+id).html(price);
+
+    $('#button-'+id).html(
+        "<div class='col-md-6'><button class='borderless-button' id='"+id+"' onClick='editRoomType(this)'>Edit</button></div> " +
+        "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomTypeCommand(this)'>Delete " +
+        "</button></div> " )
+
+}
+
+function deleteRoomTypeCommand(button) {
+    var fullId = button.id;
+    var id = fullId.split('-');
+
+    //request "deleteRoom/{id}"
+    deleteRoomType(id[0]);
+
+    //reload rooms
+    $('#existing-rooms').html("");
+    listRoomTypes();
+}
+
+
+//DELETE /roomtypes/{id}
+function deleteRoomType(id) {
+    $.ajax({
+        type: 'DELETE',
+        url: rootURL + 'roomtypes/'+id,
+        crossDomain: true,
+        dataType: "json",
+        success: function(result){
+            return true;
+        },
+        error: function(result){
+            console.log(result)
+            return false;
+        }
+    })
+}
+
+//PUT /roomtypes/{id}
+function updateExistingRoomType(id, data) {
+    $.ajax({
+        type: 'PUT',
+        contentType: 'application/json',
+        url: rootURL + 'roomtypes/'+id,
+        crossDomain: true,
+        dataType: "json",
+        data: data,
+        success: function (result) {
+            console.log(result);
+          //  callback(result);
+        },
+        error: function (result) {
+            console.log(result);
+        }
+    });
+}
+
+//GET /hotelrooms
 function listRooms() {
     $.ajax({
         type: 'GET',
         url: rootURL + 'hotelrooms',
         crossDomain:    true,
-        dataType: "json", // data type of response
+        dataType: "json",
         success: function(result){
-            console.log(result + " " + rootURL);
+            console.log(result);
         },
         error: function(result){
-            console.log(result + " " + rootURL);
+            console.log("errror.")
+            console.log(result);
         }
     });
 }
 
+//GET /hotelrooms/{id}
 function getRoom(id) {
     id = document.getElementById('id').value;
 
@@ -133,19 +343,41 @@ function getRoom(id) {
         type: 'GET',
         url: rootURL + 'hotelrooms/' + id,
         dataType: "json",
-        success: renderList
+        success: function (result) {
+            renderList(result);
+        }
     });
 }
 
+//GET /roomtypes
 function listRoomTypes() {
     $.ajax({
         type: 'GET',
         url: rootURL + 'roomtypes',
         dataType: "json",
-        success: renderList
+        success: function (result) {
+            //renderList(result);
+            listExisitingRooms(result);
+            return result;
+        }
     });
 }
 
+//GET /roomtypes
+function roomTypesToOptions() {
+    $.ajax({
+        type: 'GET',
+        url: rootURL + 'roomtypes',
+        dataType: "json",
+        success: function (result) {
+            //renderList(result);
+           jsonToList(result);
+            return result;
+        }
+    });
+}
+
+//GET /roomtypes/{id}
 function getRoomType(id) {
     id = document.getElementById('id2').value;
     $.ajax({
@@ -156,33 +388,44 @@ function getRoomType(id) {
     });
 }
 
-function updateRoomInfos(roomInfoRequest, callback) {
+//POST /roomtypes
+function updateRoomInfosServer(roomInfoRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
         url: rootURL + 'roomtypes',
+        crossDomain: true,
         dataType: "json",
         data: roomInfoRequest,
         success: function (result) {
-            console.log(result);
-            callback(result);
+            $("#newType").val("");
+            $("#amount").val("");
+            $("#price").val("");
+           // console.log(result);
+           // callback(result);
         },
         error: function (result) {
+            alert("An error occurred, but our team won't fix it because " +
+                "this is only a students project " +
+                "worth 20 points.")
             console.log(result);
         }
     });
 }
 
-function bookRoom(bookingRequest, callback) {
+//POST /roomtypes/booking
+function bookRoomServer(bookingRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
         url: rootURL + 'roomtypes/booking',
+        crossDomain: true,
         dataType: "json",
         data: bookingRequest,
         success: function (result) {
             console.log(result);
             callback(result);
+            adjustVisibilities("reservation");
         },
         error: function (result) {
             console.log(result);
@@ -190,16 +433,22 @@ function bookRoom(bookingRequest, callback) {
     });
 }
 
-function checkAvailability(availabilityRequest, callback) {
+//POST /roomtypes/checkavailability
+function checkAvailabilityServer(availabilityRequest, callback) {
     $.ajax({
         type: 'POST',
         contentType: 'application/json',
         url: rootURL + 'roomtypes/checkavailability',
+        crossDomain: true,
         dataType: "json",
         data: availabilityRequest,
         success: function (result) {
-            console.log(result);
             callback(result);
+
+            $('#alternativeOptions').html();
+            for(var a in result.alternativeRooms) {
+                $('#alternativeOptions').append("<div>"+a.id+"</div>");
+            }
         },
         error: function (result) {
             console.log(result);
@@ -208,12 +457,24 @@ function checkAvailability(availabilityRequest, callback) {
 }
 
 
-function buildRoomUpdateRequest(roomtypeid, numberOfRooms, prize) {
+
+function buildRoomUpdateRequest(name, numberOfRooms, price) {
     return JSON.stringify({
-        "password": "admin",
-        "typeId": roomtypeid,
+        "password": password,
+        "typeId": 0,
         "numberOfRooms": numberOfRooms,
-        "prize": prize
+        "price": price,
+        "name": name
+    });
+}
+
+function buildExistingRoomUpdateRequest(name, numberOfRooms, price, id) {
+    return JSON.stringify({
+        "password": password,
+        "typeId": id,
+        "numberOfRooms": numberOfRooms,
+        "price": price,
+        "name": name
     });
 }
 
@@ -235,8 +496,45 @@ function buildAvailabilityRequest(typeid, startdate, enddate) {
     });
 }
 
+function listExisitingRooms(json) {
+
+    $("#existing-rooms").html("");
+
+    for(var n in json) {
+        var id = json[n].id;
+
+        $("#existing-rooms").append(
+           " <div class='row'> " +
+             " <div class='col-md-1' id='id-"+id+"'> " +
+            id +
+            "</div>" +
+            "<div class='col-md-3' id='name-"+id+"'>" + json[n].name +"</div> " +
+            "<div class='col-md-3' id='amount-"+id+"'>" + json[n].numberOfRooms + "</div> " +
+            "<div class='col-md-2' id='price-"+id+"'>" + json[n].price + "</div> " +
+            "<div class='col-md-3 row' id='button-"+id+"'> " +
+            "<div class='col-md-6'><button class='borderless-button' id='"+id+"' onClick='editRoomType(this)'>Edit</button></div> " +
+            "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomTypeCommand(this)'>Delete " +
+            "</button></div> " +
+            "</div> " +
+            "</div>");
+    }
+}
+
+function jsonToList(json) {
+   var list = [];
+
+    $('#roomType').empty();
+
+    for(var n in json) {
+        list.push(json[n].name) ;
+        document.getElementById('roomType').options.add(new Option(json[n].name, json[n].id));
+    }
+
+    return list;
+}
 
 function renderList(json) {
+
     var html = '<ul>';
 
     for (var n in json) { // Each top-level entry

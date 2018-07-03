@@ -6,8 +6,9 @@
 
 var pageInitialized = false;
 
-var rootURL = "http://localhost:8080/DistSys_HotelRoomReservation_war_exploded/";
-//var rootURL = "http://localhost:8080/DistSys_HotelRoom_war_exploded/";
+var currentHost = window.location.host;
+
+var rootURL = "http://" + currentHost + "/DistSys_HotelRoomReservation_war_exploded/";
 var arrivalDate;
 var departureDate;
 var roomType;
@@ -23,8 +24,6 @@ $(document).ready(function () {
         pageInitialized = true;
         document.getElementById("arrivalDate").valueAsDate = new Date();
         document.getElementById("departureDate").valueAsDate = new Date();
-
-       roomTypesToOptions();
 
         adjustVisibilities("reservation");
 });
@@ -91,6 +90,7 @@ function addRoom() {
 
         var data = buildRoomUpdateRequest(type, amount, price);
         updateRoomInfosServer(data);
+        adjustVisibilities("manageRooms");
 
     } else {
         if(type == "") {
@@ -123,6 +123,7 @@ function adjustVisibilities(type) {
             $("#reservation-form").removeClass('invisible');
             $("#arrivalDate").removeClass('invalid');
             $("#departureDate").removeClass('invalid');
+            roomTypesToOptions();
             break;
         case "book":
             $("#book-form").removeClass('invisible');
@@ -176,9 +177,9 @@ function checkAvailabilityCommand() {
                 var i = 0;
                 for(var n in result.alternativeRooms) {
                     $('#alternativeOptions').append("<div class='row'>" +
-                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+n+"</div>" +
-                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+n+"</div>" +
-                        "<div class='col-md-3' id='alt-name-"+i+"'>"+n+"</div>" +
+                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate+"</div>" +
+                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate+"</div>" +
+                        "<div class='col-md-3' id='alt-name-"+i+"'>"+n.name+"</div>" +
                         "<div class='col-md-3'> " +
                         "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm(this.id)'>Book!</button>" +
                         "</div>  </div>");
@@ -216,7 +217,7 @@ function bookRoomCommand() {
 
     if (givenname != "" && surname != "") {
 
-        var data = buildBookingRequest(roomType, arrivalDate, departureDate, givenname, surname);
+        var data = buildBookingRequest(roomType, arrivalDate.toJSON(), departureDate.toJSON(), givenname, surname);
         bookRoomServer(data, function(result){});
 
 
@@ -263,12 +264,12 @@ function saveRoomType(id) {
 
     $('#button-'+id).html(
         "<div class='col-md-6'><button class='borderless-button' id='"+id+"' onClick='editRoomType(this)'>Edit</button></div> " +
-        "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomType(this)'>Delete " +
+        "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomTypeCommand(this)'>Delete " +
         "</button></div> " )
 
 }
 
-function deleteRoomType(button) {
+function deleteRoomTypeCommand(button) {
     var fullId = button.id;
     var id = fullId.split('-');
 
@@ -288,8 +289,6 @@ function deleteRoomType(id) {
         url: rootURL + 'roomtypes/'+id,
         crossDomain: true,
         dataType: "json",
-        data: JSON.stringify({
-        "password": password}),
         success: function(result){
             return true;
         },
@@ -399,7 +398,6 @@ function updateRoomInfosServer(roomInfoRequest, callback) {
         dataType: "json",
         data: roomInfoRequest,
         success: function (result) {
-            alert("Successfully added new room type!")
             $("#newType").val("");
             $("#amount").val("");
             $("#price").val("");
@@ -427,6 +425,7 @@ function bookRoomServer(bookingRequest, callback) {
         success: function (result) {
             console.log(result);
             callback(result);
+            adjustVisibilities("reservation");
         },
         error: function (result) {
             console.log(result);
@@ -514,7 +513,7 @@ function listExisitingRooms(json) {
             "<div class='col-md-2' id='price-"+id+"'>" + json[n].price + "</div> " +
             "<div class='col-md-3 row' id='button-"+id+"'> " +
             "<div class='col-md-6'><button class='borderless-button' id='"+id+"' onClick='editRoomType(this)'>Edit</button></div> " +
-            "<div class='col-md-6'<button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomType(this)'>Delete " +
+            "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomTypeCommand(this)'>Delete " +
             "</button></div> " +
             "</div> " +
             "</div>");
@@ -524,8 +523,10 @@ function listExisitingRooms(json) {
 function jsonToList(json) {
    var list = [];
 
+    $('#roomType').empty();
+
     for(var n in json) {
-        list.push(json[n].name) //later i'd rather have the name of the roomtype;
+        list.push(json[n].name) ;
         document.getElementById('roomType').options.add(new Option(json[n].name, json[n].id));
     }
 

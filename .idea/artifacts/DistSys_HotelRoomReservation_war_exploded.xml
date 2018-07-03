@@ -1,16 +1,18 @@
 <component name="ArtifactManager">
-  <artifact type="exploded-war" name="DistSys_HotelRoomReservation:war exploded">
+  <artifact type="exploded-war" build-on-make="true" name="DistSys_HotelRoomReservation:war exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/DistSys_HotelRoomReservation_war_exploded</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="DistSys_HotelRoomReservation/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="DistSys_HotelRoomReservation" />
         </element>
         <element id="directory" name="lib">
           <element id="library" level="project" name="com.fasterxml.jackson.core:jackson-core:2.9.4" />
+          <element id="library" level="project" name="Hibernate 3.6.10-3.6.10" />
+          <element id="file-copy" path="$PROJECT_DIR$/mysql-connector-java-5.1.46.jar" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="DistSys_HotelRoomReservation/web/Web" />
     </root>
   </artifact>
 </component>

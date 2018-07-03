@@ -1,5 +1,5 @@
 .idea/vcs.xml
 .idea/workspace.xml
-lib/
+# lib/ # keep libs
 out/production
-# out/artifacts is needed for glassfish distri
+# out/artifacts # is needed for glassfish distri

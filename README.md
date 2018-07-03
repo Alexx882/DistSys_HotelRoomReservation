@@ -51,3 +51,17 @@ POST /roomtypes/booking - (try to) book a roomtype
 
 POST /roomtypes/checkavailability - checks if a room of the given type is available
                                     uses communication.AvailabilityRequest and communication.AvailabilityResponse
+                                    
+                                    
+
+### Appendix: Tomcat 8.0 Setup and deployment of Project
+
+Download Tomcat from here, then install it:
+https://tomcat.apache.org/download-80.cgi
+
+Consult this guide for adding users to Tomcat:
+https://tomcat.apache.org/tomcat-8.0-doc/manager-howto.html#Configuring_Manager_Application_Access
+
+How to deploy a .WAR-File (Generation in IntelliJ: Build>Build Artifacts):
+Open the Manager in the Tomcat web interface, then Select WAR file to upload and press deploy.
+

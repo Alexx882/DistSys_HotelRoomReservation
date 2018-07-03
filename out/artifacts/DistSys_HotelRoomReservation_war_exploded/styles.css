@@ -1,10 +1,14 @@
-.form-card-1 {
-
-    position: absolute;
-    margin: 200px 0 0 0;
+body {
+    font-family: 'Quicksand', sans-serif;
+    background-image: url("blurry_background.jpg");
+    background-size: 100%;
 }
 
-.form-card-2 {
+.card-header {
+    font-size: 20pt;
+}
+
+.form-card {
     position: absolute;
     margin: 200px 0 0 0;
 }
@@ -17,11 +21,67 @@
     visibility: visible;
 }
 
+.invalid {
+    border: solid 2px #fc3545;
+}
+
 .card {
-    background: rgba(0, 10, 30, 0.5); !important;
+    background: rgba(0, 10, 30, 0.5); !important
 }
 
 .btn {
     margin: auto;
     text-align: center;
+}
+
+.footer, .header {
+
+    width: 100%;
+    position: fixed;
+    padding: 10px 20px;
+
+    background-color:  rgba(0, 10, 30, 0.5);
+    color: #ffffff;
+}
+
+.footer {
+    bottom: 0px;
+
+    font-size: 20pt;
+    text-align: right;
+    font-family: 'Amatic SC', cursive;
+}
+
+.header {
+    top: 0px;
+    font-size: 14pt;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+    margin: auto;
+}
+
+.manage-rooms-button {
+    text-decoration: underline;
+}
+
+.logo-button {
+    font-size: 26pt;
+    font-family: 'Amatic SC', cursive;
+}
+
+.borderless-button {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+}
+
+.borderless-button:hover {
+    color: antiquewhite;
+    cursor: pointer;
 }
