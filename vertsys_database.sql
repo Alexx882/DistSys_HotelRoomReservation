@@ -5,7 +5,7 @@ USE hotel_rooms;
 CREATE TABLE `hotel_rooms`.`roomtypes` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
-  `price` INT NULL,
+  `price` DOUBLE NULL,
   `numberOfRooms` INT NULL,
   PRIMARY KEY (`id`)
 );
