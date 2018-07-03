@@ -176,8 +176,8 @@ function checkAvailabilityCommand() {
 
                 var i = 0;
                 for(var idx in result.alternativeRooms) {
-                    roomtype_548894 = result.alternativeRooms[idx];
-                    if(roomtype_548894 === undefined)
+                    var roomtype_548894 = result.alternativeRooms[idx];
+                    if(i === 4)
                         // because JAVASCRIPT IS BULLSHIT
                         break;
 
@@ -186,7 +186,7 @@ function checkAvailabilityCommand() {
                         "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-name-"+i+"'>"+ roomtype_548894.name +"</div>" +
                         "<div class='col-md-3'> " +
-                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm(roomtype_548894, arrivalDate, departureDate)'>Book!</button>" +
+                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm("+roomtype_548894+", arrivalDate, departureDate)'>Book!</button>" +
                         "</div>  </div>");
                     i++;
                 }
