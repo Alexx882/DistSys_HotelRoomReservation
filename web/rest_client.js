@@ -289,8 +289,6 @@ function deleteRoomType(id) {
         url: rootURL + 'roomtypes/'+id,
         crossDomain: true,
         dataType: "json",
-        data: JSON.stringify({
-        "password": password}),
         success: function(result){
             return true;
         },
