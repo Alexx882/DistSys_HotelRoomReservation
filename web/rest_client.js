@@ -25,8 +25,6 @@ $(document).ready(function () {
         document.getElementById("arrivalDate").valueAsDate = new Date();
         document.getElementById("departureDate").valueAsDate = new Date();
 
-       roomTypesToOptions();
-
         adjustVisibilities("reservation");
 });
 
@@ -92,6 +90,7 @@ function addRoom() {
 
         var data = buildRoomUpdateRequest(type, amount, price);
         updateRoomInfosServer(data);
+        adjustVisibilities("manage");
 
     } else {
         if(type == "") {
@@ -124,6 +123,7 @@ function adjustVisibilities(type) {
             $("#reservation-form").removeClass('invisible');
             $("#arrivalDate").removeClass('invalid');
             $("#departureDate").removeClass('invalid');
+            roomTypesToOptions();
             break;
         case "book":
             $("#book-form").removeClass('invisible');
@@ -398,7 +398,6 @@ function updateRoomInfosServer(roomInfoRequest, callback) {
         dataType: "json",
         data: roomInfoRequest,
         success: function (result) {
-            alert("Successfully added new room type!")
             $("#newType").val("");
             $("#amount").val("");
             $("#price").val("");
@@ -426,6 +425,7 @@ function bookRoomServer(bookingRequest, callback) {
         success: function (result) {
             console.log(result);
             callback(result);
+            adjustVisibilities("reservation");
         },
         error: function (result) {
             console.log(result);
@@ -523,8 +523,10 @@ function listExisitingRooms(json) {
 function jsonToList(json) {
    var list = [];
 
+    document.getElementById('roomType').options = [];
+
     for(var n in json) {
-        list.push(json[n].name) //later i'd rather have the name of the roomtype;
+        list.push(json[n].name) ;
         document.getElementById('roomType').options.add(new Option(json[n].name, json[n].id));
     }
 
