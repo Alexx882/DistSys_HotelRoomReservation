@@ -33,9 +33,9 @@ function showBookForm() {
         roomTypeName = $('#roomType option:selected').text()
     }
 
-    $('#availableText').html('The room of type ' + roomTypeName + " is from " + arrivalDate.getDate() + "." +
-        arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to " + departureDate.getDate() + "." +
-        departureDate.getMonth() + "." + departureDate.getFullYear() + " still available!");
+    $('#availableText').html('The room of type ' + roomTypeName + " is from " +
+        arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") +
+        " still available!");
 
 
     adjustVisibilities("book");
@@ -47,8 +47,7 @@ function showAlternativesForm() {
     adjustVisibilities("alternatives");
 
     $('#alternativesText').html('The room of type ' + $('#roomType option:selected').text() + " for the requested period (from "
-        + arrivalDate.getDate() + "." +  arrivalDate.getMonth() + "." + arrivalDate.getFullYear() + " to "
-        + departureDate.getDate() + "." + departureDate.getMonth() + "." + departureDate.getFullYear() + ") is not available. " +
+        + arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") + ") is not available. " +
         "Here are some alternatives:");
 }
 
@@ -175,13 +174,14 @@ function checkAvailabilityCommand() {
                 $('#alternativeOptions').html("");
 
                 var i = 0;
-                for(var n in result.alternativeRooms) {
+                for(var idx in result.alternativeRooms) {
+                    var roomtype_548894 = result.alternativeRooms[idx];
                     $('#alternativeOptions').append("<div class='row'>" +
-                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate+"</div>" +
-                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate+"</div>" +
-                        "<div class='col-md-3' id='alt-name-"+i+"'>"+n.name+"</div>" +
+                        "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate.toLocaleDateString("de")+"</div>" +
+                        "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate.toLocaleDateString("de")+"</div>" +
+                        "<div class='col-md-3' id='alt-name-"+i+"'>"+ roomtype_548894.name +"</div>" +
                         "<div class='col-md-3'> " +
-                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm(this.id)'>Book!</button>" +
+                        "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm("+JSON.stringify(roomtype_548894)+", arrivalDate, departureDate)'>Book!</button>" +
                         "</div>  </div>");
                     i++;
                 }
@@ -194,7 +194,7 @@ function checkAvailabilityCommand() {
     }
 }
 
-function showBookAlternativeForm(fullId) {
+function showBookAlternativeForm_OLD(fullId) {
     var id = fullId.split('-');
 
     var arr = ($('#alt-arrivalDate-'+id[1]).html()).split('.');
@@ -204,6 +204,13 @@ function showBookAlternativeForm(fullId) {
     departureDate = new Date(dep[2], dep[1], dep[0]);
     roomTypeName = $('#alt-name-'+id[1]).html();
 
+
+    showBookForm();
+}
+
+function showBookAlternativeForm(roomty, arr, dep) {
+    roomTypeName = roomty.name;
+    roomType = roomty.id;
 
     showBookForm();
 }
@@ -442,14 +449,7 @@ function checkAvailabilityServer(availabilityRequest, callback) {
         crossDomain: true,
         dataType: "json",
         data: availabilityRequest,
-        success: function (result) {
-            callback(result);
-
-            $('#alternativeOptions').html();
-            for(var a in result.alternativeRooms) {
-                $('#alternativeOptions').append("<div>"+a.id+"</div>");
-            }
-        },
+        success: callback,
         error: function (result) {
             console.log(result);
         }
