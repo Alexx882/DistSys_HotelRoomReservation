@@ -1,29 +1,20 @@
 package controllers;
 
-import communication.AdminRequest;
 import communication.AvailabilityRequest;
 import communication.AvailabilityResponse;
 import communication.BookingRequest;
-import database.DatabaseRepository;
-import database.DummyRepos;
-import database.MySqlRepos;
 import database.SqlRepos;
 import models.*;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class HotelRoomManager {
 
     //private DummyRepos dbRepos = new DummyRepos();
-    //private SqlRepos dbRepos = new SqlRepos();
-    private MySqlRepos dbRepos = new MySqlRepos();
+    private SqlRepos dbRepos = new SqlRepos();
+    //
 
     /**
      * Updates the RoomType.
@@ -41,6 +32,8 @@ public class HotelRoomManager {
         targetRoomType.setName(name);
         targetRoomType.setNumberOfRooms(numberOfRooms);
         targetRoomType.setPrice(price);
+
+        dbRepos.updateRoomType(targetRoomType);
 
     }
 
@@ -176,8 +169,8 @@ public class HotelRoomManager {
         rte.setNumberOfRooms(numberOfRooms);
         rte.setPrice(price);
 
-        int typeId = dbRepos.addRoomType(rte);
+        /*int typeId =*/ dbRepos.updateRoomType(rte);
 
-        return typeId;
+        return -1;
     }
 }
