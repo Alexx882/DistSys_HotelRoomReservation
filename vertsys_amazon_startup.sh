@@ -9,6 +9,7 @@ sudo yum install git
 git clone https://github.com/Alexx882/DistSys_HotelRoomReservation_Server
 
 # copy webpage from project
+rm -rf ~/glassfish5/glassfish/domains/domain1/docroot/
 cp -a ~/DistSys_HotelRoomReservation_Server/out/artifacts/DistSys_HotelRoomReservation_war_exploded/. ~/glassfish5/glassfish/domains/domain1/docroot/
 
 # start glassfish and deploy REST service
