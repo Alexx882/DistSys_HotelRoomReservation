@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 body {
     font-family: 'Quicksand', sans-serif;
     background-image: url("blurry_background.jpg");
@@ -9,15 +8,7 @@ body {
     font-size: 20pt;
 }
 
-=======
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
-.form-card-1 {
-
-    position: absolute;
-    margin: 200px 0 0 0;
-}
-
-.form-card-2 {
+.form-card {
     position: absolute;
     margin: 200px 0 0 0;
 }
@@ -30,33 +21,67 @@ body {
     visibility: visible;
 }
 
+.invalid {
+    border: solid 2px #fc3545;
+}
+
 .card {
-<<<<<<< HEAD
     background: rgba(0, 10, 30, 0.5); !important
-=======
-    background: rgba(0, 10, 30, 0.5); !important;
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
 }
 
 .btn {
     margin: auto;
     text-align: center;
-<<<<<<< HEAD
 }
 
-.footer {
+.footer, .header {
 
     width: 100%;
     position: fixed;
-    bottom: 0;
     padding: 10px 20px;
 
     background-color:  rgba(0, 10, 30, 0.5);
     color: #ffffff;
+}
+
+.footer {
+    bottom: 0px;
 
     font-size: 20pt;
-    font-family: 'Amatic SC', cursive;
     text-align: right;
-=======
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
+    font-family: 'Amatic SC', cursive;
+}
+
+.header {
+    top: 0px;
+    font-size: 14pt;
+}
+
+.left {
+    text-align: left;
+}
+
+.right {
+    text-align: right;
+    margin: auto;
+}
+
+.manage-rooms-button {
+    text-decoration: underline;
+}
+
+.logo-button {
+    font-size: 26pt;
+    font-family: 'Amatic SC', cursive;
+}
+
+.borderless-button {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+}
+
+.borderless-button:hover {
+    color: antiquewhite;
+    cursor: pointer;
 }

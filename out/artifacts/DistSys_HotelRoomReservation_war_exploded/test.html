@@ -1,134 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="ISO-8859-1">
+    <meta charset="utf-8">
     <title>Room Reservation</title>
 
     <script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 
-<<<<<<< HEAD
 
-=======
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
     <script src="rest_client.js"></script>
 
-    <script>
-        function checkAvail() {
-            var avRequest =
-                buildAvailabilityRequest(2, "2018-06-05T13:27", "2018-06-05T13:27");
-<<<<<<< HEAD
-            checkAvailabilityServer(avRequest, function (response) {
-=======
-            checkAvailability(avRequest, function (response) {
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
-                alert('Success: ' + JSON.stringify(response));
-            });
-        }
 
-        function book() {
-            var boRequest =
-                buildBookingRequest(2, "2018-06-05T13:27",
-                    "2018-06-05T13:27", "peter", "Bauer");
-<<<<<<< HEAD
-            bookRoomServer(boRequest, function (response) {
-=======
-            bookRoom(boRequest, function (response) {
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
-                alert('Success: ' + JSON.stringify(response));
-            });
-        }
 
-        function updateRooms() {
-            var adRequest =
-                buildRoomUpdateRequest(2, 10, 5.7);
-<<<<<<< HEAD
-            updateRoomInfosServer(adRequest, function (response) {
-=======
-            updateRoomInfos(adRequest, function (response) {
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
-                alert('Success: ' + JSON.stringify(response));
-            });
-        }
-    </script>
-
-<<<<<<< HEAD
-
-=======
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
     <script src="rest_client.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
           integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 
     <link rel="stylesheet" href="styles.css"/>
-<<<<<<< HEAD
     <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Quicksand" rel="stylesheet">
 </head>
 <body>
-<!--
-<input type="submit" value="Get Room List" onclick="listRooms()">
-<br>
-<input type="submit" value="Get RoomTypes List" onclick="listRoomTypes()">
-<br>
-<input type="text" id="id"> <input type="submit"
-                                   value="Get Room from ID" onclick="getRoom(0)">
-<br>
-<input type="text" id="id2"> <input type="submit"
-                                    value="Get RoomType by ID" onclick="getRoomType(0)">
-<br>
 
-<input type="submit" value="Set RoomType" onclick="updateRooms()">
-<br/>
-<input type="submit" value="check if booking is available!" onclick="checkAvail()">
-<br>
-<input type="submit" value="Try to Book!" onclick="book()">
-<br>
-
-
-<div id="result"></div> -->
-=======
-</head>
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
+<div class="header">
+    <div class="row">
+        <div class="left col-md-6">
+            <button class="logo-button borderless-button" onClick="goBackToForm()">Hotel Book Website</button>
+        </div>
+        <div class="right col-md-6">
+            <button class="manage-rooms-button borderless-button" onClick="showAdminLogin()">Manage rooms</button>
+        </div>
+    </div>
+</div>
 
 <div class="container">
     <div class="row justify-content-md-center">
-        <div class="card text-white form-card-1 col-md-6" id="reservation-form">
+        <div class="card text-white form-card invisible col-md-7 col-lg-6 col-xl-5" id="reservation-form">
             <div class="card-header">Room Reservation</div>
             <div class="card-body">
 
                 <div class="row">
                     <div class="form-group col-md-6 col-sm-6">
                         <label for="arrivalDate">Arrival Date</label>
-                        <input type="date" class="form-control" id="arrivalDate"/>
+                        <input type="date" class="form-control" id="arrivalDate" required/>
                     </div>
 
                     <div class="from-group col-md-6 col-sm-6">
                         <label for="departureDate">Departure Date</label>
-                        <input type="date" class="form-control" id="departureDate"/>
+                        <input type="date" class="form-control" id="departureDate" required/>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="form-group col-md-6 col-sm-6">
                         <label for="roomType">Room Type</label>
-                        <select class="form-control" id="roomType">
-<<<<<<< HEAD
+                        <select class="form-control" id="roomType" required>
                         </select>
                     </div>
 
                     <button class="btn btn-light col-md-8 col-sm-8" onClick="checkAvailabilityCommand()">Check
                         Availability
-=======
-                            <option>Single</option>
-                            <option>Double</option>
-                            <option>Queen</option>
-                            <option>King</option>
-                            <option>Suite</option>
-                            <option>President Suite</option>
-                        </select>
-                    </div>
-
-                    <button class="btn btn-light col-md-8 col-sm-8" onClick="checkAvailability()">Check Availability
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
                     </button>
                 </div>
             </div>
@@ -137,7 +66,7 @@
 
 
     <div class="row justify-content-md-center">
-        <div class="card text-white form-card-2 invisible col-md-6" id="book-form">
+        <div class="card text-white form-card invisible col-md-7 col-lg-6 col-xl-5" id="book-form">
             <div class="card-header">Room Reservation</div>
             <div class="card-body">
 
@@ -146,82 +75,165 @@
 
                 <div class="row">
                     <div class="form-group col-md-6 col-sm-6">
-                        <label for="arrivalDate">Givenname</label>
-                        <input type="text" class="form-control" id="givenname"/>
+                        <label for="givenname">Givenname</label>
+                        <input type="text" class="form-control" id="givenname" required/>
                     </div>
 
                     <div class="from-group col-md-6 col-sm-6">
-                        <label for="departureDate">Surname</label>
-                        <input type="text" class="form-control" id="surname"/>
+                        <label for="surname">Surname</label>
+                        <input type="text" class="form-control" id="surname" required/>
                     </div>
                 </div>
                 <br/>
 
-<<<<<<< HEAD
                 <div class="row">
                     <button class="btn btn-light col-md-8 col-sm-8" onClick="bookRoomCommand()">Book Now!</button>
 
                     <button class="btn btn-secondary col-md-8 col-sm-8" onClick="goBackToForm()">Change selection
                     </button>
                 </div>
-=======
-                <button class="btn btn-light col-md-8 col-sm-8" onClick="bookRoom()">Book Now!</button>
-                <button class="btn btn-secondary col-md-8 col-sm-8" onClick="goBackToForm()">Change selection
-                </button>
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
 
             </div>
         </div>
     </div>
-<<<<<<< HEAD
+
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card invisible col-md-7 col-lg-6 col-xl-5" id="alternatives-form">
+            <div class="card-header">Room Reservation</div>
+            <div class="card-body">
+
+
+                <p id="alternativesText">Your room is not available! </p>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        Arrival Date
+                    </div>
+                    <div class="col-md-3">
+                        Departure Date
+                    </div>
+                    <div class="col-md-3">
+                        Room Type
+                    </div>
+                </div>
+
+                <div id="alternativeOptions">
+
+                </div>
+                <br/>
+
+                <div class="row">
+                    <button class="btn btn-secondary col-md-7 col-lg-6 col-xl-4" onClick="goBackToForm()">Change selection
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card invisible col-md-7 col-lg-6 col-xl-5" id="login-form">
+            <div class="card-header">Login to manage rooms</div>
+            <div class="card-body">
+
+                <div class="col-md-10 col-sm-10">
+                    <label for="password">Please enter password to enter admin page:</label>
+                    <input type="password" class="form-control" id="password" required/>
+                </div>
+                <br/>
+
+                <div class="row">
+                    <button class="btn btn-light col-md-8 col-sm-8" onClick="login()">Login
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card invisible col-md-7 col-lg-6 col-xl-5" id="manage-rooms-card">
+            <div class="card-header">Manage existing rooms</div>
+            <div class="card-body">
+                <div class="row">
+                    <button class="borderless-button offset-md-8 offset-sm-8 col-md-4 col-sm-4" onClick="showAddRoom()">
+                        + Add Room
+                    </button>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-1">
+                        Id
+                    </div>
+                    <div class="col-md-3">
+                        Name
+                    </div>
+                    <div class="col-md-3">
+                        # Rooms
+                    </div>
+                    <div class="col-md-2">
+                        Price/Night
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+
+                <div id="existing-rooms">
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-md-center">
+        <div class="card text-white form-card invisible col-md-7 col-lg-6 col-xl-5" id="add-rooms-form">
+            <div class="card-header">Add new room type</div>
+            <div class="card-body ">
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-7">
+                        <label for="newType">Room Type:</label>
+                        <input type="text" class="form-control" id="newType" required/>
+                    </div>
+
+                    <div class="col-md-4 col-sm-7">
+                        <label for="newType"># Rooms:</label>
+                        <input type="number" class="form-control" id="amount" required/>
+                    </div>
+
+                    <div class="col-md-4 col-sm-7">
+                        <label for="price">Price:</label>
+                        <input type="number" step="any" class="form-control" id="price" required/>
+                    </div>
+
+                </div>
+                <br/>
+
+                <div class="row">
+                    <div class="col-md-3">
+                        <button class="btn btn-secondary col-md-12 col-sm-12"
+                                onClick="adjustVisibilities('manageRooms')"> <-- Go Back
+                        </button>
+                    </div>
+                    <div class="offset-md-3 col-md-6">
+                        <button class="btn btn-light col-md-12 col-sm-12" onClick="addRoom()">Add Room
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 </div>
 
 
 <div class="footer">
-    © Palemöstures
+    Â© PalemÃ¶stures
 </div>
 
-=======
-</div>
-
-
-<br/>
-<br/>
-
-
-<!-- mÃ¶dis original forms
-
-<form action="" method="post">
-    <input type="submit" value="Get Room List" onclick="listRooms()">
-</form>
-
-<form action="" method="post">
-    <input type="submit" value="Get RoomTypes List" onclick="listRoomTypes()">
-
-</form>
-<form action="" method="post">
-    <input type="text" id="id"> <input type="submit"
-                                       value="Get Room from ID" onclick="getRoom(0)">
-</form>
-
-<form action="" method="post">
-    <input type="text" id="id2"> <input type="submit" value="Get RoomType by ID" onclick="getRoomType(0)">
-</form>
-
-<form action="" method="post">
-    <input type="submit" value="Set RoomType" onclick="setRoomType()">
-</form>
-
-<form action="" method="post">
-    <input type="submit" value="Try to Book!" onclick="book()">
-</form>
-
-<div class="leftArea">
-    <ul id="result"></ul> -->
-</div>
-
-
->>>>>>> faca4b140d047eec17b012ef5c6cb92338cf3326
 </body>
 </html>
