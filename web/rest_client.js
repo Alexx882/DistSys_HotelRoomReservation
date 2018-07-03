@@ -264,12 +264,12 @@ function saveRoomType(id) {
 
     $('#button-'+id).html(
         "<div class='col-md-6'><button class='borderless-button' id='"+id+"' onClick='editRoomType(this)'>Edit</button></div> " +
-        "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomType(this)'>Delete " +
+        "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomTypeCommand(this)'>Delete " +
         "</button></div> " )
 
 }
 
-function deleteRoomType(button) {
+function deleteRoomTypeCommand(button) {
     var fullId = button.id;
     var id = fullId.split('-');
 
@@ -515,7 +515,7 @@ function listExisitingRooms(json) {
             "<div class='col-md-2' id='price-"+id+"'>" + json[n].price + "</div> " +
             "<div class='col-md-3 row' id='button-"+id+"'> " +
             "<div class='col-md-6'><button class='borderless-button' id='"+id+"' onClick='editRoomType(this)'>Edit</button></div> " +
-            "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomType(this)'>Delete " +
+            "<div class='col-md-6'><button class='borderless-button' id='"+id+"-delete' onClick='deleteRoomTypeCommand(this)'>Delete " +
             "</button></div> " +
             "</div> " +
             "</div>");
