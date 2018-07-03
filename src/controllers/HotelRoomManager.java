@@ -46,34 +46,29 @@ public class HotelRoomManager {
         // booking method: Returns true on success, false on failure. Failure might be: no rooms available, error, ...
         // for recommendations check getRecommendations Method
 
-        if (getNoAvailableRooms(request.typeId, request.startDate, request.endDate) > 0) {
+        /*if (getNoAvailableRooms(request.typeId, request.startDate, request.endDate) > 0) {
             // book room; DB CALL
+*/
+        try{
+            BookingsEntity be = new BookingsEntity();
+            be.setRoomtypeId(request.typeId);
+            be.setFirstname(request.firstName);
+            be.setLastname(request.lastName);
+            be.setArrivalDate((Timestamp) request.startDate);
+            be.setDepartureDate((Timestamp) request.endDate);
 
-            try{
-                //ToDo: when dbRepos updated, check if there is insert or book method for room
-               // dbRepos.bookRoom(request.typeId, request.startDate, request.endDate);
-                RoomtypesEntity targetRoomType = dbRepos.getRoomType(request.typeId);
+            dbRepos.book(be);
+            return true;
 
-                //check if enough rooms available
-                if (getNoAvailableRooms(request.typeId, request.startDate, request.endDate)>0){
-
-                    BookingsEntity be = new BookingsEntity();
-                    be.setArrivalDate((Timestamp) request.startDate);
-
-                    dbRepos.book(be);
-                    return true;
-                } else {
-                    return false;
-                }
-               // return true;
-            } catch (Exception e){
-                return false;
-            }
-
-        }else {
-            //an error occured; booking failed - return false
+        } catch (Exception e){
+            e.printStackTrace();
             return false;
         }
+
+       /* }else {
+            //an error occured; booking failed - return false
+            return false;
+        }*/
 
     }
 
@@ -99,14 +94,14 @@ public class HotelRoomManager {
             if (b.getRoomtypeId()==typeId){
                 if(
                     // startDate between arrival and departure
-                    (startDate.compareTo(b.getArrivalDate()) >= 0
-                        && startDate.compareTo(b.getDepartureDate()) <= 0)
-                    // endDate between arrival and departure
-                    || (endDate.compareTo(b.getArrivalDate()) >= 0
-                        && endDate.compareTo(b.getDepartureDate()) <= 0)
-                    // start before, end after -> completely overlaps
-                    || (startDate.compareTo(b.getArrivalDate()) <= 0
-                        && endDate.compareTo(b.getDepartureDate()) >= 0)) {
+                        (startDate.compareTo(b.getArrivalDate()) >= 0
+                                && startDate.compareTo(b.getDepartureDate()) <= 0)
+                                // endDate between arrival and departure
+                                || (endDate.compareTo(b.getArrivalDate()) >= 0
+                                && endDate.compareTo(b.getDepartureDate()) <= 0)
+                                // start before, end after -> completely overlaps
+                                || (startDate.compareTo(b.getArrivalDate()) <= 0
+                                && endDate.compareTo(b.getDepartureDate()) >= 0)) {
 
 //                DateTime requestStart = new DateTime(startDate);
 //                DateTime requestEnd = new DateTime(endDate);
@@ -153,7 +148,7 @@ public class HotelRoomManager {
 
         }
 
-       // response.numAvailableRooms = 5;
+        // response.numAvailableRooms = 5;
 
         return response;
     }

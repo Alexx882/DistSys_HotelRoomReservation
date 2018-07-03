@@ -44,5 +44,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" scope="PROVIDED" name="GlassFish 5.0.0 - RESTful Web Service" level="application_server_libraries" />
   </component>
 </module>
