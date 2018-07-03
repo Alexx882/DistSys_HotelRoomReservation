@@ -79,7 +79,7 @@ public class RoomTypeService {
             return Response.status(Response.Status.BAD_REQUEST).build();
 
         // update a roomtype
-        roomManager.updateRoomType(request.typeId, request.name, request.numberOfRooms, request.price);
+        roomManager.updateRoomProperties(request.typeId, request.name, request.numberOfRooms, request.price);
 
         // return 204
         return Response.noContent().build();

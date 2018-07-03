@@ -10,6 +10,7 @@
           <element id="library" level="project" name="com.fasterxml.jackson.core:jackson-core:2.9.4" />
           <element id="library" level="project" name="Hibernate 3.6.10-3.6.10" />
           <element id="file-copy" path="$PROJECT_DIR$/mysql-connector-java-5.1.46.jar" />
+          <element id="library" level="project" name="joda-time-2.9.1" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="DistSys_HotelRoomReservation/web/Web" />

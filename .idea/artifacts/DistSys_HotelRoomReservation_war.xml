@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="DistSys_HotelRoomReservation:war">
-    <output-path>$PROJECT_DIR$/out/artifacts/DistSys_HotelRoomReservation_war</output-path>
-    <root id="archive" name="DistSys_HotelRoomReservation_war.war">
-      <element id="artifact" artifact-name="DistSys_HotelRoomReservation:war exploded" />
-    </root>
-  </artifact>
-</component>
