@@ -6,8 +6,9 @@
 
 var pageInitialized = false;
 
-var rootURL = "http://localhost:8080/DistSys_HotelRoomReservation_war_exploded/";
-//var rootURL = "http://localhost:8080/DistSys_HotelRoom_war_exploded/";
+var currentHost = window.location.host;
+
+var rootURL = "http://" + currentHost + "/DistSys_HotelRoomReservation_war_exploded/";
 var arrivalDate;
 var departureDate;
 var roomType;
