@@ -182,7 +182,7 @@ function checkAvailabilityCommand() {
                         "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-name-"+i+"'>"+ roomtype_548894.name +"</div>" +
-                        "<div class='col-md-1' id='alt-price-"+i+"'>"+ roomtype_548894.price +"</div>"  +
+                        "<div class='col-md-2' id='alt-price-"+i+"'>"+ roomtype_548894.price +"</div>"  +
                         "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm("+JSON.stringify(roomtype_548894)+", arrivalDate, departureDate)'>Book!</button>" +
                         "</div>  </div>");
                     i++;
