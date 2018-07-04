@@ -13,6 +13,7 @@ var arrivalDate;
 var departureDate;
 var roomType;
 var roomTypeName;
+var roomPrice;
 var givenname;
 var surname;
 var list = [];
@@ -37,7 +38,7 @@ function showBookForm() {
 
     $('#availableText').html('The room of type ' + roomTypeName + " is from " +
         arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") +
-        " still available and costs" + $("#roomPrice").html() +" $!");
+        " still available and costs" + roomPrice +" $!");
 
 
     adjustVisibilities("book");
@@ -185,8 +186,11 @@ function checkAvailabilityCommand() {
                     i++;
                 }
 
+                $('#altOptHeader').removeClass('invisible').addClass('visible');
+
                 if(i == 0) {
                     $('#alternativesText').html("We are very sorry to inform you that there are no alternative options available.");
+                    $('#altOptHeader').removeClass('invisible');
 
                 } else {   $('#alternativesText').html('The room of type ' + $('#roomType option:selected').text() + " for the requested period (from "
                     + arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") + ") is not available. " +
@@ -219,6 +223,7 @@ function showBookAlternativeForm_OLD(fullId) {
 function showBookAlternativeForm(roomty, arr, dep) {
     roomTypeName = roomty.name;
     roomType = roomty.id;
+    roomPrice = roomty.price;
 
     showBookForm();
 }
@@ -534,7 +539,8 @@ function onRoomTypeSelectionChanged() {
     console.log(room);
     console.log(el);
 
-    $("#roomPrice").html(el[0]);
+    roomPrice = el[0].price;
+    $("#roomPrice").html(el[0].price);
 }
 
 function jsonToList(json) {
