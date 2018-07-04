@@ -38,7 +38,7 @@ function showBookForm() {
 
     $('#availableText').html('The room of type ' + roomTypeName + " is from " +
         arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") +
-        " still available and costs $ " + roomPrice +"!");
+        " still available and costs $ " + roomPrice +" per night!");
 
 
     adjustVisibilities("book");
@@ -186,15 +186,14 @@ function checkAvailabilityCommand() {
                     i++;
                 }
 
-                $('#altOptHeader').removeClass('invisible').addClass('visible');
 
                 if(i == 0) {
                     $('#alternativesText').html("We are very sorry to inform you that there are no alternative options available.");
-                    $('#altOptHeader').removeClass('invisible');
 
                 } else {   $('#alternativesText').html('The room of type ' + $('#roomType option:selected').text() + " for the requested period (from "
                     + arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") + ") is not available. " +
                     "Here are some alternatives:");
+                    $('#altOptHeader').removeClass('invisible').addClass('visible');
             }
 
 
