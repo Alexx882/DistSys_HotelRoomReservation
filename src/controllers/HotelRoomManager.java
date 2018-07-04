@@ -7,6 +7,7 @@ import database.SqlRepos;
 import models.*;
 
 import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -139,6 +140,9 @@ public class HotelRoomManager {
             //fill list of alternatives
             RoomtypesEntity desiredRoomType= dbRepos.getRoomType(request.typeId);
             List<RoomtypesEntity> roomTypes = dbRepos.getRoomTypes();
+
+            // sort the list
+            roomTypes.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
 
             for (RoomtypesEntity i : roomTypes){
                 if(getNoAvailableRooms(i.getId(), request.startDate, request.endDate) == 0)
