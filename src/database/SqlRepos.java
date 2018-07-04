@@ -18,15 +18,16 @@ public class SqlRepos  {
 
         session.beginTransaction();
 
-        Query q = session.createQuery("From models.RoomtypesEntity ");
+        Query q = session.createQuery("From models.RoomtypesEntity r Order By r.name ");
         List<RoomtypesEntity> rooms;
         rooms=q.list();
         session.getTransaction().commit();
         session.close();
 
+        // sort the list
+//        rooms.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
 
         return rooms;
-
 
     }
 
