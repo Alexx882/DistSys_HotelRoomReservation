@@ -37,7 +37,7 @@ function showBookForm() {
 
     $('#availableText').html('The room of type ' + roomTypeName + " is from " +
         arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") +
-        " still available and costs" + $("#roomPrice").html() +" !");
+        " still available and costs" + $("#roomPrice").html() +" $!");
 
 
     adjustVisibilities("book");
@@ -182,7 +182,7 @@ function checkAvailabilityCommand() {
                         "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-name-"+i+"'>"+ roomtype_548894.name +"</div>" +
-                        "<div class='col-md-2' id='alt-price-"+i+"'>"+ roomtype_548894.price +"</div>"  +
+                        "<div class='col-md-2' id='alt-price-"+i+"'>"+ roomtype_548894.price +" $ </div>"  +
                         "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm("+JSON.stringify(roomtype_548894)+", arrivalDate, departureDate)'>Book!</button>" +
                         "</div>  </div>");
                     i++;
@@ -523,8 +523,10 @@ function listExisitingRooms(json) {
 }
 
 function onRoomTypeSelectionChanged() {
-    var roomId = $('#roomType option:selected');
-    var el = list.filter(function(element){ return element.id == roomId; })
+    var room = $('#roomType option:selected').text();
+    var el = list.filter(function(element){ return element.name == room; })
+    console.log(roomId);
+    console.log(el);
 
     $("#roomPrice").html(el[0]);
 }
