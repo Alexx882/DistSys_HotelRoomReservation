@@ -48,9 +48,6 @@ function showAlternativesForm() {
 
     adjustVisibilities("alternatives");
 
-    $('#alternativesText').html('The room of type ' + $('#roomType option:selected').text() + " for the requested period (from "
-        + arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") + ") is not available. " +
-        "Here are some alternatives:");
 }
 
 function goBackToForm() {
@@ -187,6 +184,15 @@ function checkAvailabilityCommand() {
                         "</div>  </div>");
                     i++;
                 }
+
+                if(i == 0) {
+                    $('#alternativesText').html("We are very sorry to inform you that there are no alternative options available.");
+
+                } else {   $('#alternativesText').html('The room of type ' + $('#roomType option:selected').text() + " for the requested period (from "
+                    + arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") + ") is not available. " +
+                    "Here are some alternatives:");
+            }
+
 
                 console.log(result.alternativeRooms);
 
@@ -525,7 +531,7 @@ function listExisitingRooms(json) {
 function onRoomTypeSelectionChanged() {
     var room = $('#roomType option:selected').text();
     var el = list.filter(function(element){ return element.name == room; })
-    console.log(roomId);
+    console.log(room);
     console.log(el);
 
     $("#roomPrice").html(el[0]);
