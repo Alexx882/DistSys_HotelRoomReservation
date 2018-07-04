@@ -142,9 +142,10 @@ public class HotelRoomManager {
             List<RoomtypesEntity> roomTypes = dbRepos.getRoomTypes();
 
             for (RoomtypesEntity i : roomTypes){
-                if(getNoAvailableRooms(i.getId(), request.startDate, request.endDate) == 0)
+                if(getNoAvailableRooms(i.getId(), request.startDate, request.endDate) <= 0){
                     // no rooms left for this type
                     continue;
+                }
 
                 if (fittingAlternative(desiredRoomType, i)){
                     response.alternativeRooms.add(i);
