@@ -137,11 +137,15 @@ public class HotelRoomManager {
             response.isRoomAvailable = false;
 
             //fill list of alternatives
-
+            RoomtypesEntity desiredRoomType= dbRepos.getRoomType(request.typeId);
             List<RoomtypesEntity> roomTypes = dbRepos.getRoomTypes();
 
-            for (RoomtypesEntity i:roomTypes){
-                if (getNoAvailableRooms(i.getId(), request.startDate, request.endDate)>0 && response.alternativeRooms.size()<5){
+            for (RoomtypesEntity i : roomTypes){
+                if(getNoAvailableRooms(i.getId(), request.startDate, request.endDate) == 0)
+                    // no rooms left for this type
+                    continue;
+
+                if (fittingAlternative(desiredRoomType, i)){
                     response.alternativeRooms.add(i);
                 }
             }
@@ -171,5 +175,22 @@ public class HotelRoomManager {
 
     private Timestamp getTimestamp(java.util.Date date){
         return date == null ? null : new java.sql.Timestamp(date.getTime());
+    }
+
+    /**
+     * Decides which Roomtypes are fitting as alternative.
+     * @param desiredRt
+     * @param possibleAltRt
+     * @return
+     */
+    private boolean fittingAlternative(RoomtypesEntity desiredRt, RoomtypesEntity possibleAltRt){
+        if(desiredRt == null || possibleAltRt== null)
+            return false;
+
+        boolean fitting = true;
+
+        fitting &= Math.abs(desiredRt.getPrice() - possibleAltRt.getPrice()) < 100;
+
+        return fitting;
     }
 }
