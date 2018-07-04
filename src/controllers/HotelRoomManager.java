@@ -141,9 +141,6 @@ public class HotelRoomManager {
             RoomtypesEntity desiredRoomType= dbRepos.getRoomType(request.typeId);
             List<RoomtypesEntity> roomTypes = dbRepos.getRoomTypes();
 
-            // sort the list
-            roomTypes.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
-
             for (RoomtypesEntity i : roomTypes){
                 if(getNoAvailableRooms(i.getId(), request.startDate, request.endDate) == 0)
                     // no rooms left for this type
