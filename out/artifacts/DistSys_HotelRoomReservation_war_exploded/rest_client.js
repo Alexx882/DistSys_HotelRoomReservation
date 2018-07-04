@@ -15,6 +15,7 @@ var roomType;
 var roomTypeName;
 var givenname;
 var surname;
+var list = [];
 
 var password;
 
@@ -24,6 +25,7 @@ $(document).ready(function () {
         pageInitialized = true;
         document.getElementById("arrivalDate").valueAsDate = new Date();
         document.getElementById("departureDate").valueAsDate = new Date();
+        $("#roomPrice").html("");
 
         adjustVisibilities("reservation");
 });
@@ -35,7 +37,7 @@ function showBookForm() {
 
     $('#availableText').html('The room of type ' + roomTypeName + " is from " +
         arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") +
-        " still available!");
+        " still available and costs" + $("#roomPrice").html() +" !");
 
 
     adjustVisibilities("book");
@@ -180,7 +182,7 @@ function checkAvailabilityCommand() {
                         "<div class='col-md-3' id='alt-arrivalDate-"+i+"'>"+arrivalDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-departureDate-"+i+"'>"+departureDate.toLocaleDateString("de")+"</div>" +
                         "<div class='col-md-3' id='alt-name-"+i+"'>"+ roomtype_548894.name +"</div>" +
-                        "<div class='col-md-3'> " +
+                        "<div class='col-md-1' id='alt-price-"+i+"'>"+ roomtype_548894.price +"</div>"  +
                         "<button class='borderless-button' id='alt-"+i+"' onClick='showBookAlternativeForm("+JSON.stringify(roomtype_548894)+", arrivalDate, departureDate)'>Book!</button>" +
                         "</div>  </div>");
                     i++;
@@ -520,15 +522,24 @@ function listExisitingRooms(json) {
     }
 }
 
+function onRoomTypeSelectionChanged() {
+    var roomId = $('#roomType option:selected');
+    var el = list.filter(function(element){ return element.id == roomId; })
+
+    $("#roomPrice").html(el[0]);
+}
+
 function jsonToList(json) {
-   var list = [];
+
 
     $('#roomType').empty();
 
     for(var n in json) {
-        list.push(json[n].name) ;
+        list.push(json[n]) ;
         document.getElementById('roomType').options.add(new Option(json[n].name, json[n].id));
     }
+
+    onRoomTypeSelectionChanged();
 
     return list;
 }
