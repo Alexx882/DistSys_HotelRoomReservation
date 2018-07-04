@@ -52,8 +52,11 @@
                 <div class="row">
                     <div class="form-group col-md-6 col-sm-6">
                         <label for="roomType">Room Type</label>
-                        <select class="form-control" id="roomType" required>
+                        <select class="form-control" id="roomType" required onchange="onRoomTypeSelectionChanged()">
                         </select>
+                    </div>
+                    <div class="col-md-6 col-sm-6 priceTag" id="roomPrice">
+
                     </div>
 
                     <button class="btn btn-light col-md-8 col-sm-8" onClick="checkAvailabilityCommand()">Check
@@ -105,7 +108,7 @@
 
                 <p id="alternativesText">Your room is not available! </p>
 
-                <div class="row">
+                <div class="row visible" id="altOptHeader">
                     <div class="col-md-3">
                         Arrival Date
                     </div>
@@ -114,6 +117,9 @@
                     </div>
                     <div class="col-md-3">
                         Room Type
+                    </div>
+                    <div class="col-md-2">
+                        Price/Night
                     </div>
                 </div>
 
