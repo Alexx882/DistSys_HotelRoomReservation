@@ -85,3 +85,7 @@ body {
     color: antiquewhite;
     cursor: pointer;
 }
+
+.priceTag {
+    margin: auto;
+}

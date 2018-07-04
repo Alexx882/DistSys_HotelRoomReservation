@@ -38,7 +38,7 @@ function showBookForm() {
 
     $('#availableText').html('The room of type ' + roomTypeName + " is from " +
         arrivalDate.toLocaleDateString("de") + " to " + departureDate.toLocaleDateString("de") +
-        " still available and costs" + roomPrice +" $!");
+        " still available and costs $ " + roomPrice +"!");
 
 
     adjustVisibilities("book");
@@ -115,7 +115,7 @@ function adjustVisibilities(type) {
     $("#login-form").removeClass('invisible').addClass('invisible');
     $("#manage-rooms-card").removeClass('invisible').addClass('invisible');
     $("#add-rooms-form").removeClass('invisible').addClass('invisible');
-
+    $('#altOptHeader').removeClass('invisible').addClass('invisible');
 
     switch (type) {
         case "reservation":
@@ -540,7 +540,7 @@ function onRoomTypeSelectionChanged() {
     console.log(el);
 
     roomPrice = el[0].price;
-    $("#roomPrice").html(el[0].price);
+    $("#roomPrice").html("$ " + el[0].price);
 }
 
 function jsonToList(json) {
